@@ -2,30 +2,89 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Stories Generator</title>
+<title>Генератор сторис</title>
+
+<style>
+body {
+  margin: 0;
+  background: #0b0b0f;
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont;
+}
+
+.container {
+  max-width: 800px;
+  margin: 80px auto;
+  padding: 40px;
+}
+
+h1 {
+  font-size: 36px;
+  margin-bottom: 30px;
+}
+
+input, textarea, select {
+  width: 100%;
+  background: #14141a;
+  border: 1px solid #2a2a35;
+  color: white;
+  padding: 14px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+button {
+  background: linear-gradient(90deg,#ff2e88,#ff6ec7);
+  border: none;
+  padding: 16px;
+  width: 100%;
+  border-radius: 12px;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.result {
+  margin-top: 30px;
+  white-space: pre-wrap;
+  line-height: 1.6;
+  background: #111117;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #2a2a35;
+}
+</style>
+
 </head>
 
-<body style="background:black; color:white; font-family:sans-serif; padding:20px">
+<body>
 
-<h2>Генератор сторис</h2>
+<div class="container">
 
-<input id="niche" placeholder="твоя ниша" style="width:100%; margin-bottom:10px">
-<input id="topic" placeholder="тема" style="width:100%; margin-bottom:10px">
-<input id="goal" placeholder="цель" style="width:100%; margin-bottom:10px">
+<h1>Генератор сторис</h1>
+
+<input id="niche" placeholder="Ниша (например: мастер маникюра / блогер / косметолог)">
+<textarea id="topic" placeholder="О чём сторис"></textarea>
+<input id="goal" placeholder="Цель (необязательно)">
 
 <select id="tone">
-<option value="игривый">игривый</option>
-<option value="экспертный">экспертный</option>
-<option value="дерзкий">дерзкий</option>
+<option value="игривый">Игривый</option>
+<option value="экспертный">Экспертный</option>
+<option value="дерзкий">Дерзкий</option>
 <option value="мири">🔥 Мири</option>
 <option value="ева">💎 Ева</option>
 </select>
 
-<br><br>
+<button onclick="generate()">Создать сторис</button>
 
-<button onclick="generate()">Сгенерировать</button>
+<div id="result" class="result"></div>
 
-<pre id="result" style="margin-top:20px"></pre>
+</div>
 
 <script>
 const API = "https://web-production-3a26.up.railway.app";
@@ -37,22 +96,30 @@ async function generate() {
   const goal = document.getElementById("goal").value;
   const tone = document.getElementById("tone").value;
 
-  const res = await fetch(API + "/generate", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
-      niche,
-      topic,
-      goal,
-      tone,
-      count: 5,
-      cat: "life"
-    })
-  });
+  const resultBlock = document.getElementById("result");
+  resultBlock.innerText = "Генерирую...";
 
-  const data = await res.json();
+  try {
+    const res = await fetch(API + "/generate", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        niche,
+        topic,
+        goal,
+        tone,
+        count: 5,
+        cat: "life"
+      })
+    });
 
-  document.getElementById("result").innerText = data.result;
+    const data = await res.json();
+
+    resultBlock.innerText = data.result;
+
+  } catch (e) {
+    resultBlock.innerText = "Ошибка подключения";
+  }
 }
 </script>
 
