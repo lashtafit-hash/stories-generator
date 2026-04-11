@@ -10,7 +10,7 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#0a0a0a;--s1:#141414;--s2:#1e1e1e;--s3:#2a2a2a;
-  --ink:#f0f0f0;--muted:#777;--dim:#3a3a3a;
+  --ink:#f0f0f0;--muted:#666;--dim:#3a3a3a;
   --pink:#ff3e7f;--pink2:#ff80ab;--pink3:#180810;--pb:#3d0f22;
 }
 html{scroll-behavior:smooth}
@@ -33,7 +33,7 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
 .input-group{display:flex;gap:8px;margin-bottom:8px}
 .inp{flex:1;padding:15px 18px;border:1px solid var(--s3);border-radius:1px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:300;color:var(--ink);background:var(--s1);outline:none;transition:border-color .2s}
 .inp:focus{border-color:var(--pink)}
-.inp::placeholder{color:#3a3a3a}
+.inp::placeholder{color:var(--dim)}
 
 .btn-go{padding:15px 20px;background:var(--pink);color:#fff;border:none;border-radius:1px;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:opacity .2s,transform .2s;white-space:nowrap}
 .btn-go:hover{opacity:.85;transform:translateY(-1px)}
@@ -51,20 +51,19 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
 .archetype-card{background:var(--pink3);border:1px solid var(--pb);border-radius:2px;padding:24px;margin-bottom:20px;display:none}
 .archetype-card.show{display:block;animation:rise .4s ease}
 .arch-eyebrow{font-size:9px;letter-spacing:.38em;color:var(--pink);text-transform:uppercase;font-weight:600;margin-bottom:10px;display:block}
-.arch-name{font-family:'Cormorant Garamond',serif;font-size:34px;font-style:italic;color:var(--ink);font-weight:500;line-height:1;margin-bottom:4px}
+.arch-name{font-family:'Cormorant Garamond',serif;font-size:36px;font-style:italic;color:var(--ink);font-weight:500;line-height:1;margin-bottom:4px}
 .arch-why{font-size:12px;color:var(--pink2);font-weight:300;line-height:1.65;margin-bottom:18px;border-left:2px solid var(--pb);padding-left:12px}
 .arch-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
-.arch-item{}
 .arch-lbl{font-size:8px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;font-weight:600;margin-bottom:4px;display:block}
 .arch-val{font-size:12px;color:var(--ink);font-weight:300;line-height:1.55}
-.hook-pill{display:inline-block;margin-top:2px;padding:10px 16px;border:1px solid var(--pb);border-radius:1px;font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:var(--pink2);line-height:1.4;width:100%}
+.hook-pill{display:block;margin-top:2px;padding:12px 16px;border:1px solid var(--pb);border-radius:1px;font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:var(--pink2);line-height:1.4}
 
-/* SECTION LABELS */
+/* SEC LABELS */
 .sec-label{font-size:9px;letter-spacing:.38em;color:var(--muted);text-transform:uppercase;font-weight:600;margin-bottom:12px;display:none}
 .sec-label.show{display:block}
 
 /* CATS GRID */
-.cats-grid{display:none;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.cats-grid{display:none;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 .cats-grid.show{display:grid;animation:rise .35s ease}
 .cat-card{background:var(--s1);border:1px solid var(--s3);border-radius:2px;padding:20px 16px;cursor:pointer;transition:all .2s;position:relative}
 .cat-card:hover{border-color:var(--pb);background:var(--s2);transform:translateY(-2px)}
@@ -75,6 +74,12 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
 .cat-desc{font-size:11px;color:var(--muted);line-height:1.45;font-weight:300}
 .cat-card.sel .cat-name{color:var(--pink)}
 .cat-card.sel .cat-desc{color:var(--pink2)}
+
+/* COUNT PILLS */
+.count-row{display:flex;gap:8px;margin-bottom:20px}
+.count-pill{flex:1;padding:11px 8px;border:1px solid var(--s3);border-radius:1px;text-align:center;cursor:pointer;transition:all .18s;font-size:13px;color:var(--muted);font-weight:300}
+.count-pill:hover{border-color:var(--pb)}
+.count-pill.sel{border-color:var(--pink);background:var(--pink3);color:var(--pink);font-weight:500}
 
 /* STEP 2 */
 .back-row{display:flex;align-items:center;gap:12px;padding:32px 0 24px}
@@ -89,31 +94,46 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
 .opt-tag{font-family:'Cormorant Garamond',serif;font-size:12px;color:var(--dim);font-style:italic;text-transform:none;letter-spacing:0;font-weight:300;margin-left:6px}
 .field textarea,.field input{width:100%;padding:13px 16px;border:1px solid var(--s3);border-radius:1px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:300;color:var(--ink);background:var(--bg);outline:none;transition:border-color .2s}
 .field textarea:focus,.field input:focus{border-color:var(--pink)}
-.field textarea::placeholder,.field input::placeholder{color:#3a3a3a}
+.field textarea::placeholder,.field input::placeholder{color:var(--dim)}
 .field textarea{resize:vertical;min-height:88px;line-height:1.65}
 .divider{width:36px;height:1px;background:var(--s3);margin:18px 0}
 
-/* TONE GRID — 5 items */
+/* TONE GRID */
 .tone-label{font-size:9px;letter-spacing:.38em;color:var(--muted);text-transform:uppercase;font-weight:600;margin-bottom:12px;display:block}
-.tone-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:0}
+.tone-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .tone-grid .tone-wide{grid-column:1/-1}
-.tone-pill{padding:14px 12px;border:1px solid var(--s3);border-radius:2px;cursor:pointer;transition:all .18s}
+.tone-pill{padding:16px 12px;border:1px solid var(--s3);border-radius:2px;cursor:pointer;transition:all .18s;text-align:center}
 .tone-pill:hover{border-color:var(--pb);background:var(--s2)}
 .tone-pill.sel{border-color:var(--pink);background:var(--pink3)}
-.tone-name{font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--ink);margin-bottom:4px}
+.tone-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--ink);font-weight:400}
 .tone-pill.sel .tone-name{color:var(--pink)}
-.tone-dna{font-size:11px;color:var(--muted);font-weight:300;line-height:1.4}
-.tone-pill.sel .tone-dna{color:var(--pink2)}
 
 /* RESULT */
 .result-wrap{margin-top:20px;display:none}
 .result-wrap.show{display:block;animation:rise .4s ease}
-.strategy-tag{display:inline-block;font-size:9px;letter-spacing:.28em;color:var(--pink);text-transform:uppercase;font-weight:600;border:1px solid var(--pb);padding:5px 12px;border-radius:1px;margin-bottom:14px}
-.result-hero{background:var(--pink3);border:1px solid var(--pb);border-radius:2px 2px 0 0;padding:28px 24px 22px;text-align:center}
-.result-eye{font-size:9px;letter-spacing:.4em;color:var(--pink);text-transform:uppercase;font-weight:600;margin-bottom:8px}
-.result-heading{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,5vw,32px);color:var(--ink);font-weight:400;font-style:italic}
-.result-body{background:var(--s1);border:1px solid var(--s3);border-top:none;border-radius:0 0 2px 2px;padding:24px;white-space:pre-wrap;font-size:13px;line-height:1.9;color:var(--ink);font-weight:300}
-.btn-copy{margin-top:10px;background:transparent;border:1px solid var(--s3);color:var(--muted);padding:11px 28px;border-radius:1px;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.3em;font-weight:600;text-transform:uppercase;cursor:pointer;transition:all .2s}
+
+.result-header{text-align:center;padding:28px 0 20px}
+.result-strategy{font-size:9px;letter-spacing:.3em;color:var(--pink);text-transform:uppercase;font-weight:600;margin-bottom:12px;display:block}
+.result-title{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,5vw,34px);color:var(--ink);font-weight:400;font-style:italic}
+
+.hook-block{background:var(--pink);padding:20px 22px;border-radius:2px;margin-bottom:16px}
+.hook-label{font-size:8px;letter-spacing:.35em;color:rgba(255,255,255,.6);text-transform:uppercase;font-weight:600;margin-bottom:8px;display:block}
+.hook-text{font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:#fff;font-weight:500;line-height:1.3}
+
+.stories-list{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.story-item{background:var(--s1);border:1px solid var(--s3);border-radius:2px;padding:20px}
+.story-num{font-size:8px;letter-spacing:.35em;color:var(--pink);text-transform:uppercase;font-weight:600;margin-bottom:10px;display:block}
+.story-text{font-size:14px;color:var(--ink);font-weight:300;line-height:1.75}
+
+.post-block{background:var(--s2);border:1px solid var(--s3);border-radius:2px;padding:20px;margin-bottom:10px}
+.post-label{font-size:8px;letter-spacing:.35em;color:var(--muted);text-transform:uppercase;font-weight:600;margin-bottom:10px;display:block}
+.post-text{font-size:13px;color:var(--ink);font-weight:300;line-height:1.75}
+
+.cta-block{border-left:2px solid var(--pink);padding:14px 18px;margin-bottom:14px}
+.cta-label{font-size:8px;letter-spacing:.35em;color:var(--pink);text-transform:uppercase;font-weight:600;margin-bottom:8px;display:block}
+.cta-text{font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--pink2);line-height:1.5}
+
+.btn-copy{background:transparent;border:1px solid var(--s3);color:var(--muted);padding:11px 28px;border-radius:1px;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.3em;font-weight:600;text-transform:uppercase;cursor:pointer;transition:all .2s;width:100%}
 .btn-copy:hover{border-color:var(--pink);color:var(--pink)}
 
 .err{font-size:11px;color:var(--pink2);font-weight:400;margin-top:6px;display:none}
@@ -124,9 +144,7 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
 @keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
 
 @media(max-width:420px){
-  .arch-grid{grid-template-columns:1fr}
-  .cats-grid{gap:8px}
-  .tone-grid{grid-template-columns:1fr}
+  .arch-grid,.tone-grid{grid-template-columns:1fr}
   .tone-grid .tone-wide{grid-column:auto}
 }
 </style>
@@ -144,7 +162,7 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
     </div>
 
     <div class="input-group">
-      <input class="inp" type="text" id="niche" placeholder="Косметолог-инъекционист, астролог, мама-блогер в Дубае…" maxlength="300">
+      <input class="inp" type="text" id="niche" placeholder="Косметолог-инъекционист, астролог, мама-блогер…" maxlength="300">
       <button class="btn-go" onclick="analyzeNiche()" id="analyze-btn">→</button>
     </div>
     <div class="err" id="err1"></div>
@@ -154,19 +172,19 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
       <div class="arch-name" id="arch-name"></div>
       <div class="arch-why" id="arch-why"></div>
       <div class="arch-grid">
-        <div class="arch-item">
+        <div>
           <span class="arch-lbl">Глубинная потребность</span>
           <div class="arch-val" id="arch-need"></div>
         </div>
-        <div class="arch-item">
+        <div>
           <span class="arch-lbl">Теневой страх</span>
           <div class="arch-val" id="arch-fear"></div>
         </div>
-        <div class="arch-item">
+        <div>
           <span class="arch-lbl">Визуальный код</span>
           <div class="arch-val" id="arch-visual"></div>
         </div>
-        <div class="arch-item">
+        <div>
           <span class="arch-lbl">Вектор контента</span>
           <div class="arch-val" id="arch-vector"></div>
         </div>
@@ -198,6 +216,12 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
       </div>
     </div>
 
+    <div class="count-row" id="count-row" style="display:none">
+      <div class="count-pill sel" onclick="pickCount(this,3)">3 сторис</div>
+      <div class="count-pill" onclick="pickCount(this,5)">5 сторис</div>
+      <div class="count-pill" onclick="pickCount(this,7)">7 сторис</div>
+    </div>
+
     <button class="btn-main" id="btn-next" onclick="goStep2()">Продолжить →</button>
   </div>
 
@@ -213,7 +237,7 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
     <div class="card">
       <div class="field">
         <div class="field-label">Ситуация или тема</div>
-        <textarea id="topic" placeholder="Спортзал, встреча с подругой, утренний ритуал, новая процедура, поездка…"></textarea>
+        <textarea id="topic" placeholder="Спортзал, встреча с подругой, утренний ритуал, новая процедура…"></textarea>
       </div>
       <div class="divider"></div>
       <div class="field">
@@ -227,23 +251,18 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
       <div class="tone-grid">
         <div class="tone-pill" onclick="pickTone(this,'МИРИ')">
           <div class="tone-name">Мири</div>
-          <div class="tone-dna">Дерзко. Дистанция. Позволяет купить</div>
         </div>
         <div class="tone-pill" onclick="pickTone(this,'ЕВА')">
           <div class="tone-name">Ева</div>
-          <div class="tone-dna">Pinterest. Мягкая сила. Вдохновение</div>
         </div>
         <div class="tone-pill" onclick="pickTone(this,'ИГРИВЫЙ')">
           <div class="tone-name">Игривый</div>
-          <div class="tone-dna">Юмор. Мемы. Своя девчонка</div>
         </div>
         <div class="tone-pill" onclick="pickTone(this,'ЭКСПЕРТНЫЙ')">
           <div class="tone-name">Экспертный</div>
-          <div class="tone-dna">Логика. Факты. Без воды</div>
         </div>
         <div class="tone-pill tone-wide" onclick="pickTone(this,'ДРУЖЕЛЮБНЫЙ')">
           <div class="tone-name">Дружелюбный</div>
-          <div class="tone-dna">Тепло. Искренность. Ощущение близкой подруги</div>
         </div>
       </div>
     </div>
@@ -251,13 +270,25 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
     <div class="err" id="err2"></div>
     <button class="btn-main show" onclick="generate()" id="gen-btn" style="margin-top:10px">Создать сторис →</button>
 
+    <!-- RESULT -->
     <div class="result-wrap" id="result-wrap">
-      <div class="strategy-tag" id="strategy-tag"></div>
-      <div class="result-hero">
-        <div class="result-eye">Готово</div>
-        <div class="result-heading">Твои сторис</div>
+      <div class="result-header">
+        <span class="result-strategy" id="result-strategy"></span>
+        <div class="result-title">Твои сторис</div>
       </div>
-      <div class="result-body" id="result-text"></div>
+      <div class="hook-block" id="hook-block" style="display:none">
+        <span class="hook-label">Hook</span>
+        <div class="hook-text" id="hook-text"></div>
+      </div>
+      <div class="stories-list" id="stories-list"></div>
+      <div class="post-block" id="post-block" style="display:none">
+        <span class="post-label">Пост / подпись</span>
+        <div class="post-text" id="post-text"></div>
+      </div>
+      <div class="cta-block" id="cta-block" style="display:none">
+        <span class="cta-label">CTA</span>
+        <div class="cta-text" id="cta-text"></div>
+      </div>
       <button class="btn-copy" onclick="copyRes()" id="copy-btn">Скопировать текст</button>
     </div>
   </div>
@@ -265,7 +296,7 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
 </div>
 <script>
 const API_BASE = "https://web-production-3a26.up.railway.app";
-let archetypeData={}, selectedCat=null, selectedTone=null;
+let archetypeData={}, selectedCat=null, selectedTone=null, selectedCount=3;
 const CAT_LABELS={sell:'✦ Продающие',warmup:'◈ Прогрев',life:'✿ Лайф',expert:'◇ Экспертные'};
 
 function showErr(id,msg){const e=document.getElementById(id);if(msg)e.textContent=msg;e.classList.add('show')}
@@ -278,17 +309,15 @@ async function analyzeNiche(){
   const btn=document.getElementById('analyze-btn');
   btn.innerHTML='<span class="dot">·</span><span class="dot">·</span><span class="dot">·</span>';
   btn.disabled=true;
-
   try{
     const res=await fetch(`${API_BASE}/analyze`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({niche})});
     if(!res.ok)throw new Error();
     archetypeData=await res.json();
-    if(archetypeData.error)throw new Error(archetypeData.error);
+    if(archetypeData.error)throw new Error();
   }catch(e){
-    archetypeData={archetype:'Эстет',why:'Не удалось подключиться к серверу',deep_need:'—',shadow_fear:'—',visual_code:'—',hook_phrase:'—',content_vector:'—'};
-    showErr('err1','Сервер недоступен. Проверь, запущен ли Railway.');
+    archetypeData={archetype:'—',why:'Сервер недоступен',deep_need:'—',shadow_fear:'—',visual_code:'—',hook_phrase:'—',content_vector:'—'};
+    showErr('err1','Сервер недоступен. Проверь Railway.');
   }
-
   document.getElementById('arch-name').textContent=archetypeData.archetype||'';
   document.getElementById('arch-why').textContent=archetypeData.why||'';
   document.getElementById('arch-need').textContent=archetypeData.deep_need||'';
@@ -296,7 +325,6 @@ async function analyzeNiche(){
   document.getElementById('arch-visual').textContent=archetypeData.visual_code||'';
   document.getElementById('arch-vector').textContent=archetypeData.content_vector||'';
   document.getElementById('arch-hook').textContent=archetypeData.hook_phrase?`«${archetypeData.hook_phrase}»`:'';
-
   document.getElementById('archetype-card').classList.add('show');
   document.getElementById('cats-label').classList.add('show');
   document.getElementById('cats-grid').classList.add('show');
@@ -306,14 +334,18 @@ async function analyzeNiche(){
 function pickCat(el,cat){
   document.querySelectorAll('.cat-card').forEach(c=>c.classList.remove('sel'));
   el.classList.add('sel');selectedCat=cat;
-  if(selectedTone)document.getElementById('btn-next').classList.add('show');
-  else document.getElementById('btn-next').classList.add('show');
+  document.getElementById('count-row').style.display='flex';
+  document.getElementById('btn-next').classList.add('show');
+}
+
+function pickCount(el,n){
+  document.querySelectorAll('.count-pill').forEach(p=>p.classList.remove('sel'));
+  el.classList.add('sel');selectedCount=n;
 }
 
 function pickTone(el,tone){
   document.querySelectorAll('.tone-pill').forEach(p=>p.classList.remove('sel'));
   el.classList.add('sel');selectedTone=tone;
-  if(selectedCat)document.getElementById('btn-next').classList.add('show');
 }
 
 function goStep2(){
@@ -332,16 +364,62 @@ function goBack(){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
+function parseAndRender(text, strategy){
+  // Strategy badge
+  document.getElementById('result-strategy').textContent = strategy ? `Стратегия: ${strategy}` : '';
+
+  // Parse HOOK
+  const hookMatch = text.match(/HOOK:\s*(.+?)(?:\n|$)/i);
+  if(hookMatch){
+    document.getElementById('hook-text').textContent = hookMatch[1].trim();
+    document.getElementById('hook-block').style.display='block';
+  }
+
+  // Parse STORIES
+  const storiesList = document.getElementById('stories-list');
+  storiesList.innerHTML='';
+  const storyRegex = /СТОРИС\s*(\d+)[^\n]*:\s*([\s\S]*?)(?=СТОРИС\s*\d+|ПОСТ:|CTA:|$)/gi;
+  let m;
+  while((m=storyRegex.exec(text))!==null){
+    const num=m[1], content=m[2].trim();
+    if(!content) continue;
+    const item=document.createElement('div');
+    item.className='story-item';
+    item.innerHTML=`<span class="story-num">Сторис ${num}</span><div class="story-text">${content.replace(/\n/g,'<br>')}</div>`;
+    storiesList.appendChild(item);
+  }
+
+  // Parse POST
+  const postMatch = text.match(/ПОСТ:\s*([\s\S]*?)(?=CTA:|$)/i);
+  if(postMatch && postMatch[1].trim()){
+    document.getElementById('post-text').textContent = postMatch[1].trim();
+    document.getElementById('post-block').style.display='block';
+  }
+
+  // Parse CTA
+  const ctaMatch = text.match(/CTA:\s*([\s\S]*?)$/i);
+  if(ctaMatch && ctaMatch[1].trim()){
+    document.getElementById('cta-text').textContent = ctaMatch[1].trim();
+    document.getElementById('cta-block').style.display='block';
+  }
+
+  document.getElementById('result-wrap').classList.add('show');
+  document.getElementById('result-wrap').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
 async function generate(){
   const topic=document.getElementById('topic').value.trim();
-  if(!topic){showErr('err2','Напиши ситуацию или тему — о чём сторис?');return}
+  if(!topic){showErr('err2','Напиши ситуацию или тему');return}
   if(!selectedTone){showErr('err2','Выбери тональность');return}
   hideErr('err2');
-
   const btn=document.getElementById('gen-btn');
   btn.innerHTML='<span class="dot">·</span><span class="dot">·</span><span class="dot">·</span>';
   btn.disabled=true;
   document.getElementById('result-wrap').classList.remove('show');
+  document.getElementById('hook-block').style.display='none';
+  document.getElementById('post-block').style.display='none';
+  document.getElementById('cta-block').style.display='none';
+  document.getElementById('stories-list').innerHTML='';
 
   try{
     const res=await fetch(`${API_BASE}/generate`,{
@@ -350,18 +428,14 @@ async function generate(){
         niche:document.getElementById('niche').value.trim(),
         archetype:archetypeData.archetype||'',
         archetype_data:archetypeData,
-        cat:selectedCat,
-        tone:selectedTone,
-        topic,
-        goal:document.getElementById('goal').value.trim()
+        cat:selectedCat,tone:selectedTone,topic,
+        goal:document.getElementById('goal').value.trim(),
+        count:selectedCount
       })
     });
     if(!res.ok)throw new Error();
     const data=await res.json();
-    document.getElementById('result-text').textContent=data.result||'Ошибка генерации.';
-    if(data.strategy)document.getElementById('strategy-tag').textContent=`Стратегия: ${data.strategy}`;
-    document.getElementById('result-wrap').classList.add('show');
-    document.getElementById('result-wrap').scrollIntoView({behavior:'smooth',block:'start'});
+    parseAndRender(data.result||'', data.strategy||'');
   }catch(e){
     showErr('err2','Ошибка подключения к серверу.');
   }
@@ -369,12 +443,25 @@ async function generate(){
 }
 
 function copyRes(){
-  navigator.clipboard.writeText(document.getElementById('result-text').textContent).then(()=>{
+  const parts=[];
+  const hook=document.getElementById('hook-text').textContent;
+  if(hook) parts.push('HOOK: '+hook);
+  document.querySelectorAll('.story-item').forEach(s=>{
+    const num=s.querySelector('.story-num').textContent;
+    const txt=s.querySelector('.story-text').innerText;
+    parts.push(num+':\n'+txt);
+  });
+  const post=document.getElementById('post-text').textContent;
+  if(post) parts.push('ПОСТ:\n'+post);
+  const cta=document.getElementById('cta-text').textContent;
+  if(cta) parts.push('CTA: '+cta);
+  navigator.clipboard.writeText(parts.join('\n\n')).then(()=>{
     const btn=document.getElementById('copy-btn');
     btn.textContent='Скопировано ✦';
     setTimeout(()=>btn.textContent='Скопировать текст',2000);
   });
 }
+
 document.getElementById('niche').addEventListener('keydown',e=>{if(e.key==='Enter')analyzeNiche()});
 </script>
 </body>
