@@ -35,7 +35,7 @@ def init_db():
             google_id TEXT,
             name TEXT,
             avatar TEXT,
-            free_left INTEGER DEFAULT 10,
+            free_left INTEGER DEFAULT 7,
             is_paid BOOLEAN DEFAULT FALSE,
             paid_until TIMESTAMP,
             total_generated INTEGER DEFAULT 0,
@@ -280,7 +280,7 @@ def history():
 def create_payment():
     idempotence = str(uuid.uuid4())
     payload = {
-        "amount": {"value": "490.00", "currency": "RUB"},
+        "amount": {"value": "199.00", "currency": "RUB"},
         "confirmation": {"type": "redirect", "return_url": SITE_URL},
         "capture": True,
         "description": "Подписка на 1 месяц — ME•CODE Stories",
@@ -298,7 +298,7 @@ def create_payment():
         pay_url = r.get("confirmation", {}).get("confirmation_url")
         conn = get_db(); cur = conn.cursor()
         cur.execute("INSERT INTO payments (user_id,yukassa_id,amount) VALUES (%s,%s,%s)",
-                    (request.user_id, pay_id, "490.00"))
+                    (request.user_id, pay_id, "199.00"))
         conn.commit(); cur.close(); conn.close()
         return jsonify({"payment_url": pay_url})
     except Exception as e:
