@@ -3,138 +3,199 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Генератор сторис</title>
+<title>ME•CODE Stories</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#ff3e7f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Stories">
+<link rel="apple-touch-icon" href="/icons/mecode_512.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#0a0a0a;--s1:#141414;--s2:#1e1e1e;--s3:#2a2a2a;
-  --ink:#f0f0f0;--muted:#666;--dim:#3a3a3a;
-  --pink:#ff3e7f;--pink2:#ff80ab;--pink3:#180810;--pb:#3d0f22;
-}
+:root{--bg:#0a0a0a;--s1:#141414;--s2:#1e1e1e;--s3:#2a2a2a;--ink:#f0f0f0;--muted:#666;--dim:#3a3a3a;--pink:#ff3e7f;--pink2:#ff80ab;--pink3:#180810;--pb:#3d0f22}
 html{scroll-behavior:smooth}
 body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;display:flex;justify-content:center;padding:0 0 80px}
 .wrap{width:100%;max-width:500px;padding:0 18px}
-
-.scr{display:none}
-.scr.on{display:block;animation:rise .4s ease both}
+.page{display:none}.page.on{display:block;animation:rise .4s ease both}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 
-/* HERO */
-.hero{text-align:center;padding:52px 0 36px}
-.eyebrow{display:inline-block;font-size:9px;letter-spacing:.38em;color:var(--pink);text-transform:uppercase;font-weight:500;border-bottom:1px solid var(--pb);padding-bottom:6px;margin-bottom:28px}
-.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,9vw,58px);font-weight:400;font-style:italic;color:var(--ink);line-height:1.1;margin-bottom:6px}
-.hero-title strong{font-weight:600;font-style:normal;color:var(--pink);display:block}
-.orn{font-family:'Cormorant Garamond',serif;color:var(--pb);font-size:18px;letter-spacing:8px;margin:16px 0;display:block}
-.hero-sub{font-size:13px;color:var(--muted);line-height:1.8;font-weight:300;max-width:360px;margin:0 auto 36px}
+/* AUTH */
+.auth-wrap{padding:52px 0 0;text-align:center}
+.auth-logo{font-family:'Cormorant Garamond',serif;font-size:32px;font-style:italic;color:var(--pink);margin-bottom:6px}
+.auth-logo span{color:var(--muted);font-style:normal;font-size:13px;font-family:'Montserrat',sans-serif;font-weight:300;display:block;letter-spacing:.2em;margin-top:4px}
+.orn{font-family:'Cormorant Garamond',serif;color:var(--pb);font-size:16px;letter-spacing:8px;margin:14px 0 24px;display:block}
+.auth-title{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,7vw,44px);font-weight:400;font-style:italic;color:var(--ink);line-height:1.1;margin-bottom:24px}
+.auth-title strong{font-weight:600;font-style:normal;color:var(--pink);display:block}
 
-/* INPUT */
-.input-group{display:flex;gap:8px;margin-bottom:8px}
-.inp{flex:1;padding:15px 18px;border:1px solid var(--s3);border-radius:1px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:300;color:var(--ink);background:var(--s1);outline:none;transition:border-color .2s}
+.btn-google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px;background:#fff;color:#1a1a1a;border:none;border-radius:1px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:opacity .2s;margin-bottom:14px}
+.btn-google:hover{opacity:.9}
+.btn-google svg{width:18px;height:18px;flex-shrink:0}
+
+.or-divider{display:flex;align-items:center;gap:12px;margin:16px 0;color:var(--muted);font-size:11px}
+.or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:var(--s3)}
+
+.auth-card{background:var(--s1);border:1px solid var(--s3);border-radius:2px;padding:24px;text-align:left}
+.f{margin-bottom:14px}
+.f label{font-size:9px;letter-spacing:.35em;color:var(--muted);text-transform:uppercase;font-weight:600;display:block;margin-bottom:6px}
+.f input{width:100%;padding:13px 16px;border:1px solid var(--s3);border-radius:1px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:300;color:var(--ink);background:var(--bg);outline:none;transition:border-color .2s}
+.f input:focus{border-color:var(--pink)}
+.f input::placeholder{color:var(--dim)}
+.btn-pink{width:100%;padding:15px;background:var(--pink);color:#fff;border:none;border-radius:1px;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:.34em;font-weight:600;text-transform:uppercase;cursor:pointer;transition:opacity .2s;margin-top:4px}
+.btn-pink:hover{opacity:.85}
+.btn-pink:disabled{opacity:.4;pointer-events:none}
+.auth-switch{text-align:center;margin-top:14px;font-size:12px;color:var(--muted)}
+.auth-switch a{color:var(--pink);cursor:pointer}
+.oferta-note{text-align:center;font-size:11px;color:var(--dim);margin-top:10px}
+.oferta-note a{color:var(--pink)}
+.err-msg{font-size:11px;color:var(--pink2);margin-top:8px;display:none}
+.err-msg.show{display:block}
+
+/* CABINET */
+.cab-top{padding:24px 0 16px;display:flex;align-items:center;justify-content:space-between}
+.cab-left{display:flex;align-items:center;gap:10px}
+.cab-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;border:1px solid var(--pb)}
+.cab-avatar-placeholder{width:36px;height:36px;border-radius:50%;background:var(--pink3);border:1px solid var(--pb);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:var(--pink)}
+.cab-info{}
+.cab-name{font-size:13px;color:var(--ink);font-weight:500}
+.cab-email{font-size:11px;color:var(--muted)}
+.btn-sm{background:none;border:1px solid var(--s3);color:var(--muted);padding:7px 14px;border-radius:1px;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.btn-sm:hover{border-color:var(--pink);color:var(--pink)}
+.status-card{background:var(--pink3);border:1px solid var(--pb);border-radius:2px;padding:20px;margin-bottom:14px}
+.srow{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.srow:last-of-type{margin-bottom:0}
+.slbl{font-size:9px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;font-weight:600}
+.sval{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:var(--pink)}
+.sval.paid{color:#1dd1a1}
+.pay-btn{width:100%;margin-top:14px;padding:14px;background:var(--pink);color:#fff;border:none;border-radius:1px;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:.3em;font-weight:600;text-transform:uppercase;cursor:pointer;transition:opacity .2s}
+.pay-btn:hover{opacity:.85}
+.pay-btn.hide{display:none}
+.hist-section{margin-top:20px}
+.hist-title{font-size:9px;letter-spacing:.35em;color:var(--muted);text-transform:uppercase;font-weight:600;margin-bottom:10px;display:block}
+.hist-item{background:var(--s1);border:1px solid var(--s3);border-radius:2px;padding:14px 16px;margin-bottom:8px}
+.hist-niche{font-size:12px;color:var(--ink);font-weight:500;margin-bottom:3px}
+.hist-meta{font-size:11px;color:var(--muted);font-weight:300}
+.hist-empty{font-size:12px;color:var(--muted);font-weight:300;text-align:center;padding:20px 0}
+
+/* APP */
+.app-top{display:flex;justify-content:space-between;align-items:center;padding:18px 0 14px}
+.app-logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:var(--pink)}
+.app-top-right{display:flex;align-items:center;gap:8px}
+.counter{font-size:11px;font-weight:500;padding:5px 12px;border-radius:1px;border:1px solid var(--pb);color:var(--pink2);background:var(--pink3)}
+.counter.unlimited{border-color:#0a3020;color:#1dd1a1;background:#041a10}
+.scr{display:none}.scr.on{display:block;animation:rise .4s ease both}
+.hero{text-align:center;padding:14px 0 24px}
+.eyebrow{display:inline-block;font-size:9px;letter-spacing:.38em;color:var(--pink);text-transform:uppercase;font-weight:500;border-bottom:1px solid var(--pb);padding-bottom:6px;margin-bottom:18px}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,7vw,44px);font-weight:400;font-style:italic;color:var(--ink);line-height:1.1;margin-bottom:6px}
+.hero-title strong{font-weight:600;font-style:normal;color:var(--pink);display:block}
+.inp-group{display:flex;gap:8px;margin-bottom:8px}
+.inp{flex:1;padding:14px 16px;border:1px solid var(--s3);border-radius:1px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:300;color:var(--ink);background:var(--s1);outline:none;transition:border-color .2s}
 .inp:focus{border-color:var(--pink)}
 .inp::placeholder{color:var(--dim)}
-
-.btn-go{padding:15px 20px;background:var(--pink);color:#fff;border:none;border-radius:1px;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:opacity .2s,transform .2s;white-space:nowrap}
-.btn-go:hover{opacity:.85;transform:translateY(-1px)}
+.btn-go{padding:14px 18px;background:var(--pink);color:#fff;border:none;border-radius:1px;font-size:14px;cursor:pointer;transition:opacity .2s}
+.btn-go:hover{opacity:.85}
 .btn-go:disabled{opacity:.35;pointer-events:none}
-
-.btn-main{width:100%;padding:17px;background:var(--pink);color:#fff;border:none;border-radius:1px;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:.34em;font-weight:600;text-transform:uppercase;cursor:pointer;transition:opacity .2s;display:none}
+.btn-main{width:100%;padding:16px;background:var(--pink);color:#fff;border:none;border-radius:1px;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:.34em;font-weight:600;text-transform:uppercase;cursor:pointer;transition:opacity .2s;display:none}
 .btn-main.show{display:block;animation:rise .3s ease}
 .btn-main:hover{opacity:.85}
 .btn-main:disabled{opacity:.4;pointer-events:none}
-
-.btn-ghost{background:transparent;border:1px solid var(--s3);color:var(--muted);padding:10px 22px;border-radius:1px;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.3em;font-weight:500;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.btn-ghost{background:transparent;border:1px solid var(--s3);color:var(--muted);padding:9px 18px;border-radius:1px;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.3em;font-weight:500;text-transform:uppercase;cursor:pointer;transition:all .2s}
 .btn-ghost:hover{border-color:var(--pink);color:var(--pink)}
-
-/* ARCHETYPE CARD */
-.archetype-card{background:var(--pink3);border:1px solid var(--pb);border-radius:2px;padding:24px;margin-bottom:20px;display:none}
-.archetype-card.show{display:block;animation:rise .4s ease}
-.arch-eyebrow{font-size:9px;letter-spacing:.38em;color:var(--pink);text-transform:uppercase;font-weight:600;margin-bottom:10px;display:block}
-.arch-name{font-family:'Cormorant Garamond',serif;font-size:36px;font-style:italic;color:var(--ink);font-weight:500;line-height:1;margin-bottom:4px}
-.arch-why{font-size:12px;color:var(--pink2);font-weight:300;line-height:1.65;margin-bottom:18px;border-left:2px solid var(--pb);padding-left:12px}
-.arch-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
-.arch-lbl{font-size:8px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;font-weight:600;margin-bottom:4px;display:block}
-.arch-val{font-size:12px;color:var(--ink);font-weight:300;line-height:1.55}
-.hook-pill{display:block;margin-top:2px;padding:12px 16px;border:1px solid var(--pb);border-radius:1px;font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:var(--pink2);line-height:1.4}
-
-/* SEC LABELS */
-.sec-label{font-size:9px;letter-spacing:.38em;color:var(--muted);text-transform:uppercase;font-weight:600;margin-bottom:12px;display:none}
-.sec-label.show{display:block}
-
-/* CATS GRID */
+.arch-card{background:var(--pink3);border:1px solid var(--pb);border-radius:2px;padding:22px;margin-bottom:18px;display:none}
+.arch-card.show{display:block;animation:rise .4s ease}
+.arch-ey{font-size:9px;letter-spacing:.38em;color:var(--pink);text-transform:uppercase;font-weight:600;margin-bottom:8px;display:block}
+.arch-name{font-family:'Cormorant Garamond',serif;font-size:30px;font-style:italic;color:var(--ink);font-weight:500;line-height:1;margin-bottom:4px}
+.arch-why{font-size:12px;color:var(--pink2);font-weight:300;line-height:1.65;margin-bottom:14px;border-left:2px solid var(--pb);padding-left:12px}
+.arch-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.arch-lbl{font-size:8px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;font-weight:600;margin-bottom:3px;display:block}
+.arch-val{font-size:12px;color:var(--ink);font-weight:300;line-height:1.5}
+.hook-pill{display:block;padding:10px 14px;border:1px solid var(--pb);border-radius:1px;font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:var(--pink2);line-height:1.4}
+.sec-lbl{font-size:9px;letter-spacing:.38em;color:var(--muted);text-transform:uppercase;font-weight:600;margin-bottom:10px;display:none}
+.sec-lbl.show{display:block}
 .cats-grid{display:none;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 .cats-grid.show{display:grid;animation:rise .35s ease}
-.cat-card{background:var(--s1);border:1px solid var(--s3);border-radius:2px;padding:20px 16px;cursor:pointer;transition:all .2s;position:relative}
+.cat-card{background:var(--s1);border:1px solid var(--s3);border-radius:2px;padding:18px 14px;cursor:pointer;transition:all .2s;position:relative}
 .cat-card:hover{border-color:var(--pb);background:var(--s2);transform:translateY(-2px)}
 .cat-card.sel{border-color:var(--pink);background:var(--pink3);transform:translateY(-2px)}
 .cat-card.sel::after{content:'✦';position:absolute;top:10px;right:12px;font-size:10px;color:var(--pink)}
-.cat-icon{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:var(--pink);display:block;margin-bottom:8px;font-weight:300}
-.cat-name{font-size:10px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;color:var(--ink);margin-bottom:4px}
-.cat-desc{font-size:11px;color:var(--muted);line-height:1.45;font-weight:300}
+.cat-icon{font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--pink);display:block;margin-bottom:7px}
+.cat-name{font-size:10px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:var(--ink);margin-bottom:3px}
+.cat-desc{font-size:11px;color:var(--muted);line-height:1.4;font-weight:300}
 .cat-card.sel .cat-name{color:var(--pink)}
 .cat-card.sel .cat-desc{color:var(--pink2)}
-
-/* COUNT PILLS */
-.count-row{display:flex;gap:8px;margin-bottom:20px}
-.count-pill{flex:1;padding:11px 8px;border:1px solid var(--s3);border-radius:1px;text-align:center;cursor:pointer;transition:all .18s;font-size:13px;color:var(--muted);font-weight:300}
+.count-row{display:flex;gap:8px;margin-bottom:16px}
+.count-pill{flex:1;padding:10px 8px;border:1px solid var(--s3);border-radius:1px;text-align:center;cursor:pointer;transition:all .18s;font-size:12px;color:var(--muted);font-weight:300}
 .count-pill:hover{border-color:var(--pb)}
 .count-pill.sel{border-color:var(--pink);background:var(--pink3);color:var(--pink);font-weight:500}
-
-/* STEP 2 */
-.back-row{display:flex;align-items:center;gap:12px;padding:32px 0 24px}
-.cat-badge{font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:var(--pink);font-weight:500}
-.step2-title{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,6vw,38px);font-weight:400;font-style:italic;color:var(--ink);line-height:1.2;margin-bottom:6px}
-.step2-sub{font-size:12px;color:var(--muted);font-weight:300;margin-bottom:24px;line-height:1.7}
-
-.card{background:var(--s1);border:1px solid var(--s3);border-radius:2px;padding:24px 20px;margin-bottom:10px}
-.field{margin-bottom:18px}
-.field:last-child{margin-bottom:0}
-.field-label{font-size:9px;letter-spacing:.38em;color:var(--muted);text-transform:uppercase;font-weight:600;margin-bottom:8px;display:block}
-.opt-tag{font-family:'Cormorant Garamond',serif;font-size:12px;color:var(--dim);font-style:italic;text-transform:none;letter-spacing:0;font-weight:300;margin-left:6px}
-.field textarea,.field input{width:100%;padding:13px 16px;border:1px solid var(--s3);border-radius:1px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:300;color:var(--ink);background:var(--bg);outline:none;transition:border-color .2s}
-.field textarea:focus,.field input:focus{border-color:var(--pink)}
-.field textarea::placeholder,.field input::placeholder{color:var(--dim)}
-.field textarea{resize:vertical;min-height:88px;line-height:1.65}
-.divider{width:36px;height:1px;background:var(--s3);margin:18px 0}
-
-/* TONE GRID */
-.tone-label{font-size:9px;letter-spacing:.38em;color:var(--muted);text-transform:uppercase;font-weight:600;margin-bottom:12px;display:block}
+.back-row{display:flex;align-items:center;gap:10px;padding:22px 0 16px}
+.cat-badge{font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:var(--pink);font-weight:500}
+.step2-title{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,6vw,34px);font-weight:400;font-style:italic;color:var(--ink);line-height:1.2;margin-bottom:6px}
+.step2-sub{font-size:12px;color:var(--muted);font-weight:300;margin-bottom:20px;line-height:1.7}
+.card{background:var(--s1);border:1px solid var(--s3);border-radius:2px;padding:20px 18px;margin-bottom:10px}
+.fl{font-size:9px;letter-spacing:.38em;color:var(--muted);text-transform:uppercase;font-weight:600;margin-bottom:7px;display:block}
+.opt-tag{font-family:'Cormorant Garamond',serif;font-size:12px;color:var(--dim);font-style:italic;text-transform:none;letter-spacing:0;font-weight:300;margin-left:5px}
+.card textarea,.card input[type=text]{width:100%;padding:12px 14px;border:1px solid var(--s3);border-radius:1px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:300;color:var(--ink);background:var(--bg);outline:none;transition:border-color .2s}
+.card textarea:focus,.card input[type=text]:focus{border-color:var(--pink)}
+.card textarea::placeholder,.card input[type=text]::placeholder{color:var(--dim)}
+.card textarea{resize:vertical;min-height:84px;line-height:1.65}
+.divider{width:32px;height:1px;background:var(--s3);margin:14px 0}
+.tone-lbl{font-size:9px;letter-spacing:.38em;color:var(--muted);text-transform:uppercase;font-weight:600;margin-bottom:10px;display:block}
+.tone-special{font-size:9px;letter-spacing:.35em;color:var(--pink);text-transform:uppercase;font-weight:600;margin:14px 0 10px;display:block;border-top:1px solid var(--pb);padding-top:14px}
 .tone-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.tone-grid .tone-wide{grid-column:1/-1}
-.tone-pill{padding:16px 12px;border:1px solid var(--s3);border-radius:2px;cursor:pointer;transition:all .18s;text-align:center}
+.tone-grid .wide{grid-column:1/-1}
+.tone-pill{padding:14px 10px;border:1px solid var(--s3);border-radius:2px;cursor:pointer;transition:all .18s;text-align:center}
 .tone-pill:hover{border-color:var(--pb);background:var(--s2)}
 .tone-pill.sel{border-color:var(--pink);background:var(--pink3)}
-.tone-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--ink);font-weight:400}
+.tone-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--ink);font-weight:400}
 .tone-pill.sel .tone-name{color:var(--pink)}
 
 /* RESULT */
-.result-wrap{margin-top:20px;display:none}
+.result-wrap{margin-top:18px;display:none}
 .result-wrap.show{display:block;animation:rise .4s ease}
-
-.result-header{text-align:center;padding:28px 0 20px}
-.result-strategy{font-size:9px;letter-spacing:.3em;color:var(--pink);text-transform:uppercase;font-weight:600;margin-bottom:12px;display:block}
-.result-title{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,5vw,34px);color:var(--ink);font-weight:400;font-style:italic}
-
-.hook-block{background:var(--pink);padding:20px 22px;border-radius:2px;margin-bottom:16px}
-.hook-label{font-size:8px;letter-spacing:.35em;color:rgba(255,255,255,.6);text-transform:uppercase;font-weight:600;margin-bottom:8px;display:block}
-.hook-text{font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:#fff;font-weight:500;line-height:1.3}
-
-.stories-list{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
-.story-item{background:var(--s1);border:1px solid var(--s3);border-radius:2px;padding:20px}
-.story-num{font-size:8px;letter-spacing:.35em;color:var(--pink);text-transform:uppercase;font-weight:600;margin-bottom:10px;display:block}
+.strategy-tag{display:inline-block;font-size:9px;letter-spacing:.28em;color:var(--pink);text-transform:uppercase;font-weight:600;border:1px solid var(--pb);padding:4px 10px;border-radius:1px;margin-bottom:12px}
+.result-hero{background:var(--pink3);border:1px solid var(--pb);border-radius:2px 2px 0 0;padding:20px 18px;text-align:center}
+.result-eye{font-size:9px;letter-spacing:.4em;color:var(--pink);text-transform:uppercase;font-weight:600;margin-bottom:7px}
+.result-heading{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,5vw,28px);color:var(--ink);font-weight:400;font-style:italic}
+.hook-block{background:var(--pink);padding:16px 18px;margin-bottom:10px}
+.hook-label{font-size:8px;letter-spacing:.35em;color:rgba(255,255,255,.6);text-transform:uppercase;font-weight:600;margin-bottom:7px;display:block}
+.hook-text{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:#fff;font-weight:500;line-height:1.3}
+.stories-list{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.story-item{background:var(--s1);border:1px solid var(--s3);border-radius:2px;padding:16px}
+.story-num{font-size:8px;letter-spacing:.35em;color:var(--pink);text-transform:uppercase;font-weight:600;margin-bottom:7px;display:block}
 .story-text{font-size:14px;color:var(--ink);font-weight:300;line-height:1.75}
-
-.post-block{background:var(--s2);border:1px solid var(--s3);border-radius:2px;padding:20px;margin-bottom:10px}
-.post-label{font-size:8px;letter-spacing:.35em;color:var(--muted);text-transform:uppercase;font-weight:600;margin-bottom:10px;display:block}
+.post-block{background:var(--s2);border:1px solid var(--s3);border-radius:2px;padding:16px;margin-bottom:8px}
+.post-label{font-size:8px;letter-spacing:.35em;color:var(--muted);text-transform:uppercase;font-weight:600;margin-bottom:7px;display:block}
 .post-text{font-size:13px;color:var(--ink);font-weight:300;line-height:1.75}
+.cta-block{border-left:2px solid var(--pink);padding:12px 16px;margin-bottom:12px}
+.cta-label{font-size:8px;letter-spacing:.35em;color:var(--pink);text-transform:uppercase;font-weight:600;margin-bottom:6px;display:block}
+.cta-text{font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:var(--pink2);line-height:1.5}
+.result-actions{display:flex;gap:8px}
+.btn-action{flex:1;padding:11px 8px;border-radius:1px;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.25em;font-weight:600;text-transform:uppercase;cursor:pointer;transition:all .2s;text-align:center}
+.btn-regen{background:var(--pink3);border:1px solid var(--pb);color:var(--pink2)}
+.btn-regen:hover{border-color:var(--pink);color:var(--pink)}
+.btn-regen:disabled{opacity:.4;pointer-events:none}
+.btn-copy-res{background:transparent;border:1px solid var(--s3);color:var(--muted)}
+.btn-copy-res:hover{border-color:var(--pink);color:var(--pink)}
 
-.cta-block{border-left:2px solid var(--pink);padding:14px 18px;margin-bottom:14px}
-.cta-label{font-size:8px;letter-spacing:.35em;color:var(--pink);text-transform:uppercase;font-weight:600;margin-bottom:8px;display:block}
-.cta-text{font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--pink2);line-height:1.5}
+/* PAYWALL */
+.paywall{background:var(--pink3);border:1px solid var(--pb);border-radius:2px;padding:28px 22px;text-align:center;margin-top:18px;display:none}
+.paywall.show{display:block;animation:rise .35s ease}
+.paywall-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-style:italic;color:var(--ink);margin-bottom:8px}
+.paywall-sub{font-size:13px;color:var(--muted);font-weight:300;line-height:1.6;margin-bottom:20px}
+.paywall-price{font-family:'Cormorant Garamond',serif;font-size:42px;color:var(--pink);font-weight:500;margin-bottom:4px}
+.paywall-period{font-size:11px;color:var(--muted);margin-bottom:20px}
 
-.btn-copy{background:transparent;border:1px solid var(--s3);color:var(--muted);padding:11px 28px;border-radius:1px;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.3em;font-weight:600;text-transform:uppercase;cursor:pointer;transition:all .2s;width:100%}
-.btn-copy:hover{border-color:var(--pink);color:var(--pink)}
+/* REGISTER PROMPT (после 3 бесплатных без аккаунта) */
+.reg-prompt{background:var(--s1);border:1px solid var(--s3);border-radius:2px;padding:22px;text-align:center;margin-top:18px;display:none}
+.reg-prompt.show{display:block;animation:rise .35s ease}
+.reg-prompt-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:var(--ink);margin-bottom:8px}
+.reg-prompt-sub{font-size:12px;color:var(--muted);font-weight:300;margin-bottom:18px;line-height:1.6}
+.reg-prompt-bonus{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--pink);font-style:italic;margin-bottom:18px}
+
+.btn-restart{display:none;width:100%;padding:11px;background:none;border:1px solid var(--s3);color:var(--muted);border-radius:1px;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.3em;font-weight:500;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-top:8px}
+.btn-restart.show{display:block}
+.btn-restart:hover{border-color:var(--pink);color:var(--pink)}
 
 .err{font-size:11px;color:var(--pink2);font-weight:400;margin-top:6px;display:none}
 .err.show{display:block}
@@ -143,180 +204,397 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
 .dot:nth-child(3){animation-delay:.4s}
 @keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
 
-@media(max-width:420px){
-  .arch-grid,.tone-grid{grid-template-columns:1fr}
-  .tone-grid .tone-wide{grid-column:auto}
-}
+@media(max-width:420px){.arch-grid,.tone-grid{grid-template-columns:1fr}.tone-grid .wide{grid-column:auto}.result-actions{flex-direction:column}}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <!-- STEP 1 -->
-  <div class="scr on" id="sc1">
-    <div class="hero">
-      <span class="eyebrow">Stories Generator</span>
-      <h1 class="hero-title">Сторис,<br><strong>которые работают</strong></h1>
+  <!-- LOGIN -->
+  <div class="page" id="pg-login">
+    <div class="auth-wrap">
+      <div class="auth-logo">ME•CODE<span>Stories Generator</span></div>
       <span class="orn">— ✦ —</span>
-      <p class="hero-sub">Расскажи о своём блоге — система определит архетип твоей аудитории и подберёт стратегию.</p>
+      <h1 class="auth-title">Войди<br><strong>или зарегистрируйся</strong></h1>
     </div>
-
-    <div class="input-group">
-      <input class="inp" type="text" id="niche" placeholder="Косметолог-инъекционист, астролог, мама-блогер…" maxlength="300">
-      <button class="btn-go" onclick="analyzeNiche()" id="analyze-btn">→</button>
+    <button class="btn-google" onclick="googleLogin()">
+      <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Войти через Google
+    </button>
+    <div class="or-divider">или</div>
+    <div class="auth-card">
+      <div class="f"><label>Email</label><input type="email" id="login-email" placeholder="you@example.com"></div>
+      <div class="f"><label>Пароль</label><input type="password" id="login-pw" placeholder="••••••"></div>
+      <div class="err-msg" id="login-err"></div>
+      <button class="btn-pink" onclick="doLogin()" id="login-btn">Войти →</button>
+      <div class="auth-switch">Нет аккаунта? <a onclick="showPage('pg-register')">Зарегистрироваться</a></div>
+      <div class="auth-switch" style="margin-top:8px"><a onclick="showPage('pg-app');initGuest()">Попробовать без регистрации →</a></div>
     </div>
-    <div class="err" id="err1"></div>
-
-    <div class="archetype-card" id="archetype-card">
-      <span class="arch-eyebrow">Архетип твоей аудитории</span>
-      <div class="arch-name" id="arch-name"></div>
-      <div class="arch-why" id="arch-why"></div>
-      <div class="arch-grid">
-        <div>
-          <span class="arch-lbl">Глубинная потребность</span>
-          <div class="arch-val" id="arch-need"></div>
-        </div>
-        <div>
-          <span class="arch-lbl">Теневой страх</span>
-          <div class="arch-val" id="arch-fear"></div>
-        </div>
-        <div>
-          <span class="arch-lbl">Визуальный код</span>
-          <div class="arch-val" id="arch-visual"></div>
-        </div>
-        <div>
-          <span class="arch-lbl">Вектор контента</span>
-          <div class="arch-val" id="arch-vector"></div>
-        </div>
-      </div>
-      <div class="hook-pill" id="arch-hook"></div>
-    </div>
-
-    <div class="sec-label" id="cats-label">Выбери тип сторис</div>
-    <div class="cats-grid" id="cats-grid">
-      <div class="cat-card" onclick="pickCat(this,'sell')">
-        <span class="cat-icon">✦</span>
-        <div class="cat-name">Продающие</div>
-        <div class="cat-desc">Прямой оффер — берём внимание и конвертируем</div>
-      </div>
-      <div class="cat-card" onclick="pickCat(this,'warmup')">
-        <span class="cat-icon">◈</span>
-        <div class="cat-name">Прогрев</div>
-        <div class="cat-desc">Жизнь + продукт. Незаметно греем интерес</div>
-      </div>
-      <div class="cat-card" onclick="pickCat(this,'life')">
-        <span class="cat-icon">✿</span>
-        <div class="cat-name">Лайф</div>
-        <div class="cat-desc">0% продаж. 100% сопричастности</div>
-      </div>
-      <div class="cat-card" onclick="pickCat(this,'expert')">
-        <span class="cat-icon">◇</span>
-        <div class="cat-name">Экспертные</div>
-        <div class="cat-desc">Мозги напоказ. Знания и результаты</div>
-      </div>
-    </div>
-
-    <div class="count-row" id="count-row" style="display:none">
-      <div class="count-pill sel" onclick="pickCount(this,3)">3 сторис</div>
-      <div class="count-pill" onclick="pickCount(this,5)">5 сторис</div>
-      <div class="count-pill" onclick="pickCount(this,7)">7 сторис</div>
-    </div>
-
-    <button class="btn-main" id="btn-next" onclick="goStep2()">Продолжить →</button>
   </div>
 
-  <!-- STEP 2 -->
-  <div class="scr" id="sc2">
-    <div class="back-row">
-      <button class="btn-ghost" onclick="goBack()">← Назад</button>
-      <span class="cat-badge" id="cat-badge"></span>
+  <!-- REGISTER -->
+  <div class="page" id="pg-register">
+    <div class="auth-wrap">
+      <div class="auth-logo">ME•CODE<span>Stories Generator</span></div>
+      <span class="orn">— ✦ —</span>
+      <h1 class="auth-title">Создай<br><strong>аккаунт</strong></h1>
     </div>
-    <div class="step2-title">Что рассказываем?</div>
-    <p class="step2-sub">Ситуация + цель + голос — остальное система сделает сама.</p>
+    <button class="btn-google" onclick="googleLogin()">
+      <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Зарегистрироваться через Google
+    </button>
+    <div class="or-divider">или</div>
+    <div class="auth-card">
+      <div class="f"><label>Email</label><input type="email" id="reg-email" placeholder="you@example.com"></div>
+      <div class="f"><label>Пароль</label><input type="password" id="reg-pw" placeholder="Минимум 6 символов"></div>
+      <div class="err-msg" id="reg-err"></div>
+      <button class="btn-pink" onclick="doRegister()" id="reg-btn">Создать аккаунт →</button>
+      <div class="oferta-note">Регистрируясь, вы принимаете <a href="/oferta.html" target="_blank">условия оферты</a></div>
+      <div class="auth-switch">Уже есть аккаунт? <a onclick="showPage('pg-login')">Войти</a></div>
+    </div>
+  </div>
 
-    <div class="card">
-      <div class="field">
-        <div class="field-label">Ситуация или тема</div>
-        <textarea id="topic" placeholder="Спортзал, встреча с подругой, утренний ритуал, новая процедура…"></textarea>
+  <!-- CABINET -->
+  <div class="page" id="pg-cabinet">
+    <div class="cab-top">
+      <div class="cab-left">
+        <div id="cab-avatar-wrap"></div>
+        <div class="cab-info">
+          <div class="cab-name" id="cab-name"></div>
+          <div class="cab-email" id="cab-email"></div>
+        </div>
       </div>
-      <div class="divider"></div>
-      <div class="field">
-        <div class="field-label">Цель <span class="opt-tag">необязательно</span></div>
-        <input type="text" id="goal" placeholder="Запись на процедуру, покупка курса, подписка…">
+      <button class="btn-sm" onclick="logout()">Выйти</button>
+    </div>
+    <div class="status-card">
+      <div class="srow"><span class="slbl">Статус</span><span class="sval" id="cab-status"></span></div>
+      <div class="srow"><span class="slbl">Генераций осталось</span><span class="sval" id="cab-free"></span></div>
+      <div class="srow" id="cab-until-row" style="display:none"><span class="slbl">Подписка до</span><span class="sval" id="cab-until" style="font-size:14px"></span></div>
+      <button class="pay-btn" id="cab-pay-btn" onclick="startPayment()">Оформить подписку — 490 ₽/мес →</button>
+      <div class="oferta-note" style="margin-top:8px"><a href="/oferta.html" target="_blank">Условия оферты</a></div>
+    </div>
+    <button class="btn-pink" onclick="showPage('pg-app')">Создавать сторис →</button>
+    <div class="hist-section">
+      <span class="hist-title">История генераций</span>
+      <div id="hist-list"><div class="hist-empty">Загрузка…</div></div>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div class="page on" id="pg-app">
+    <div class="app-top">
+      <div class="app-logo">ME•CODE</div>
+      <div class="app-top-right">
+        <div class="counter" id="top-counter"></div>
+        <button class="btn-sm" id="cab-btn" onclick="showPage('pg-cabinet')" style="display:none">Кабинет</button>
+        <button class="btn-sm" id="login-btn-top" onclick="showPage('pg-login')">Войти</button>
       </div>
     </div>
 
-    <div class="card">
-      <span class="tone-label">Тональность</span>
-      <div class="tone-grid">
-        <div class="tone-pill" onclick="pickTone(this,'МИРИ')">
-          <div class="tone-name">Мири</div>
-        </div>
-        <div class="tone-pill" onclick="pickTone(this,'ЕВА')">
-          <div class="tone-name">Ева</div>
-        </div>
-        <div class="tone-pill" onclick="pickTone(this,'ИГРИВЫЙ')">
-          <div class="tone-name">Игривый</div>
-        </div>
-        <div class="tone-pill" onclick="pickTone(this,'ЭКСПЕРТНЫЙ')">
-          <div class="tone-name">Экспертный</div>
-        </div>
-        <div class="tone-pill tone-wide" onclick="pickTone(this,'ДРУЖЕЛЮБНЫЙ')">
-          <div class="tone-name">Дружелюбный</div>
-        </div>
+    <!-- STEP 1 -->
+    <div class="scr on" id="sc1">
+      <div class="hero">
+        <span class="eyebrow">Stories Generator</span>
+        <h1 class="hero-title">Сторис,<br><strong>которые работают</strong></h1>
       </div>
+      <div class="inp-group">
+        <input class="inp" type="text" id="niche" placeholder="Косметолог, астролог, мама-блогер…" maxlength="300">
+        <button class="btn-go" onclick="analyzeNiche()" id="analyze-btn">→</button>
+      </div>
+      <div class="err" id="err1"></div>
+      <div class="arch-card" id="arch-card">
+        <span class="arch-ey">Архетип твоей аудитории</span>
+        <div class="arch-name" id="arch-name"></div>
+        <div class="arch-why" id="arch-why"></div>
+        <div class="arch-grid">
+          <div><span class="arch-lbl">Глубинная потребность</span><div class="arch-val" id="arch-need"></div></div>
+          <div><span class="arch-lbl">Теневой страх</span><div class="arch-val" id="arch-fear"></div></div>
+          <div><span class="arch-lbl">Визуальный код</span><div class="arch-val" id="arch-visual"></div></div>
+          <div><span class="arch-lbl">Вектор контента</span><div class="arch-val" id="arch-vector"></div></div>
+        </div>
+        <div class="hook-pill" id="arch-hook"></div>
+      </div>
+      <div class="sec-lbl" id="cats-label">Выбери тип сторис</div>
+      <div class="cats-grid" id="cats-grid">
+        <div class="cat-card" onclick="pickCat(this,'sell')"><span class="cat-icon">✦</span><div class="cat-name">Продающие</div><div class="cat-desc">Прямой оффер — конвертируем</div></div>
+        <div class="cat-card" onclick="pickCat(this,'warmup')"><span class="cat-icon">◈</span><div class="cat-name">Прогрев</div><div class="cat-desc">Жизнь + продукт. Греем</div></div>
+        <div class="cat-card" onclick="pickCat(this,'life')"><span class="cat-icon">✿</span><div class="cat-name">Лайф</div><div class="cat-desc">0% продаж. 100% доверия</div></div>
+        <div class="cat-card" onclick="pickCat(this,'expert')"><span class="cat-icon">◇</span><div class="cat-name">Экспертные</div><div class="cat-desc">Знания и результаты</div></div>
+      </div>
+      <div class="count-row" id="count-row" style="display:none">
+        <div class="count-pill sel" onclick="pickCount(this,3)">3 сторис</div>
+        <div class="count-pill" onclick="pickCount(this,5)">5 сторис</div>
+        <div class="count-pill" onclick="pickCount(this,7)">7 сторис</div>
+      </div>
+      <button class="btn-main" id="btn-next" onclick="goStep2()">Продолжить →</button>
     </div>
 
-    <div class="err" id="err2"></div>
-    <button class="btn-main show" onclick="generate()" id="gen-btn" style="margin-top:10px">Создать сторис →</button>
+    <!-- STEP 2 -->
+    <div class="scr" id="sc2">
+      <div class="back-row">
+        <button class="btn-ghost" onclick="goBack()">← Назад</button>
+        <span class="cat-badge" id="cat-badge"></span>
+      </div>
+      <div class="step2-title">Что рассказываем?</div>
+      <p class="step2-sub">Ситуация + цель + голос — остальное система сделает сама.</p>
+      <div class="card">
+        <span class="fl">Ситуация или тема</span>
+        <textarea id="topic" placeholder="Спортзал, встреча с подругой, утренний ритуал…"></textarea>
+        <div class="divider"></div>
+        <span class="fl">Цель <span class="opt-tag">необязательно</span></span>
+        <input type="text" id="goal" placeholder="Запись, покупка, подписка…">
+      </div>
+      <div class="card">
+        <span class="tone-lbl">Тональность</span>
+        <div class="tone-grid">
+          <div class="tone-pill" onclick="pickTone(this,'ИГРИВЫЙ')"><div class="tone-name">Игривый</div></div>
+          <div class="tone-pill" onclick="pickTone(this,'ЭКСПЕРТНЫЙ')"><div class="tone-name">Экспертный</div></div>
+          <div class="tone-pill wide" onclick="pickTone(this,'ДРУЖЕЛЮБНЫЙ')"><div class="tone-name">Дружелюбный</div></div>
+        </div>
+        <span class="tone-special">Авторский стиль ✦</span>
+        <div class="tone-grid">
+          <div class="tone-pill" onclick="pickTone(this,'МИРИ')"><div class="tone-name">Мири</div></div>
+          <div class="tone-pill" onclick="pickTone(this,'ЕВА')"><div class="tone-name">Ева</div></div>
+        </div>
+      </div>
+      <div class="err" id="err2"></div>
+      <button class="btn-main show" onclick="generate()" id="gen-btn" style="margin-top:10px">Создать сторис →</button>
+      <button class="btn-restart" id="btn-restart" onclick="restartAll()">← Начать заново</button>
 
-    <!-- RESULT -->
-    <div class="result-wrap" id="result-wrap">
-      <div class="result-header">
-        <span class="result-strategy" id="result-strategy"></span>
-        <div class="result-title">Твои сторис</div>
+      <!-- Приглашение зарегистрироваться (гостям после 3 попыток) -->
+      <div class="reg-prompt" id="reg-prompt">
+        <div class="reg-prompt-title">Тебе понравилось?</div>
+        <div class="reg-prompt-sub">Зарегистрируйся бесплатно и получи ещё 7 генераций</div>
+        <div class="reg-prompt-bonus">+ 7 генераций бесплатно ✦</div>
+        <button class="btn-google" onclick="googleLogin()" style="margin-bottom:10px">
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Войти через Google
+        </button>
+        <button class="btn-ghost" style="width:100%" onclick="showPage('pg-register')">Регистрация через email</button>
       </div>
-      <div class="hook-block" id="hook-block" style="display:none">
-        <span class="hook-label">Hook</span>
-        <div class="hook-text" id="hook-text"></div>
+
+      <div class="paywall" id="paywall">
+        <div class="paywall-title">Бесплатные генерации закончились</div>
+        <div class="paywall-sub">Оформи подписку и получи безлимитный доступ на весь месяц</div>
+        <div class="paywall-price">490 ₽</div>
+        <div class="paywall-period">в месяц · безлимит · отмена в любой момент</div>
+        <button class="pay-btn" onclick="startPayment()">Оформить подписку →</button>
+        <div class="oferta-note" style="margin-top:10px"><a href="/oferta.html" target="_blank">Условия оферты</a></div>
       </div>
-      <div class="stories-list" id="stories-list"></div>
-      <div class="post-block" id="post-block" style="display:none">
-        <span class="post-label">Пост / подпись</span>
-        <div class="post-text" id="post-text"></div>
+
+      <div class="result-wrap" id="result-wrap">
+        <div class="strategy-tag" id="strategy-tag"></div>
+        <div class="result-hero"><div class="result-eye">Готово</div><div class="result-heading">Твои сторис</div></div>
+        <div class="hook-block" id="hook-block" style="display:none"><span class="hook-label">Hook</span><div class="hook-text" id="hook-text"></div></div>
+        <div class="stories-list" id="stories-list"></div>
+        <div class="post-block" id="post-block" style="display:none"><span class="post-label">Пост / подпись</span><div class="post-text" id="post-text"></div></div>
+        <div class="cta-block" id="cta-block" style="display:none"><span class="cta-label">CTA</span><div class="cta-text" id="cta-text"></div></div>
+        <div class="result-actions">
+          <button class="btn-action btn-regen" id="btn-regen" onclick="generate()">↻ Ещё вариант</button>
+          <button class="btn-action btn-copy-res" onclick="copyRes()">Скопировать</button>
+        </div>
       </div>
-      <div class="cta-block" id="cta-block" style="display:none">
-        <span class="cta-label">CTA</span>
-        <div class="cta-text" id="cta-text"></div>
-      </div>
-      <button class="btn-copy" onclick="copyRes()" id="copy-btn">Скопировать текст</button>
     </div>
   </div>
 
 </div>
 <script>
-const API_BASE = "https://web-production-3a26.up.railway.app";
+const API = "https://web-production-3a26.up.railway.app";
+const GUEST_LIMIT = 3;
+
+let token = localStorage.getItem("token") || "";
+let userData = {};
+let isGuest = false;
+let guestLeft = parseInt(sessionStorage.getItem("guestLeft") ?? GUEST_LIMIT);
+
 let archetypeData={}, selectedCat=null, selectedTone=null, selectedCount=3;
 const CAT_LABELS={sell:'✦ Продающие',warmup:'◈ Прогрев',life:'✿ Лайф',expert:'◇ Экспертные'};
 
-function showErr(id,msg){const e=document.getElementById(id);if(msg)e.textContent=msg;e.classList.add('show')}
+// ── INIT ──
+(function(){
+  // Проверяем Google callback
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('token')){
+    const d = {
+      token: params.get('token'),
+      email: params.get('email'),
+      name:  params.get('name'),
+      avatar: params.get('avatar'),
+      free_left: parseInt(params.get('free_left')||'10'),
+      is_paid: params.get('is_paid')==='True'
+    };
+    saveUser(d);
+    window.history.replaceState({}, '', '/');
+    showLoggedIn();
+    showPage('pg-cabinet');
+    return;
+  }
+  if(params.get('error')){
+    window.history.replaceState({}, '', '/');
+  }
+
+  const saved = localStorage.getItem('userData');
+  if(token && saved){
+    userData = JSON.parse(saved);
+    showLoggedIn();
+    showPage('pg-app');
+  } else {
+    showPage('pg-app');
+    updateGuestCounter();
+  }
+
+  document.getElementById('niche').addEventListener('keydown',e=>{if(e.key==='Enter')analyzeNiche()});
+})();
+
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='pg-cabinet') loadCabinet();
+}
+
+function showErr(id,msg){const e=document.getElementById(id);e.textContent=msg;e.classList.add('show')}
 function hideErr(id){document.getElementById(id).classList.remove('show')}
 
+function showLoggedIn(){
+  isGuest = false;
+  document.getElementById('cab-btn').style.display='block';
+  document.getElementById('login-btn-top').style.display='none';
+  updateCounter();
+}
+
+function initGuest(){
+  isGuest = true;
+  updateGuestCounter();
+}
+
+function updateGuestCounter(){
+  const el = document.getElementById('top-counter');
+  el.textContent = `${guestLeft} из ${GUEST_LIMIT}`;
+  el.className = 'counter';
+}
+
+function updateCounter(){
+  const el = document.getElementById('top-counter');
+  const isPaid = userData.is_paid && userData.paid_until && new Date(userData.paid_until)>new Date();
+  if(isPaid){ el.textContent='∞ Безлимит'; el.className='counter unlimited'; }
+  else { el.textContent=`${userData.free_left??0} из 10`; el.className='counter'; }
+}
+
+// ── AUTH ──
+function googleLogin(){
+  window.location.href = `${API}/auth/google`;
+}
+
+async function doRegister(){
+  const email=document.getElementById('reg-email').value.trim();
+  const pw=document.getElementById('reg-pw').value;
+  const btn=document.getElementById('reg-btn');
+  btn.disabled=true; btn.textContent='Загрузка…';
+  try{
+    const r=await fetch(`${API}/register`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pw})});
+    const d=await r.json();
+    if(d.error){showErr('reg-err',d.error);return}
+    saveUser(d); showLoggedIn(); showPage('pg-cabinet');
+  }catch(e){showErr('reg-err','Ошибка соединения')}
+  finally{btn.disabled=false;btn.textContent='Создать аккаунт →'}
+}
+
+async function doLogin(){
+  const email=document.getElementById('login-email').value.trim();
+  const pw=document.getElementById('login-pw').value;
+  const btn=document.getElementById('login-btn');
+  btn.disabled=true; btn.textContent='Загрузка…';
+  try{
+    const r=await fetch(`${API}/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pw})});
+    const d=await r.json();
+    if(d.error){showErr('login-err',d.error);return}
+    saveUser(d); showLoggedIn(); showPage('pg-cabinet');
+  }catch(e){showErr('login-err','Ошибка соединения')}
+  finally{btn.disabled=false;btn.textContent='Войти →'}
+}
+
+function saveUser(d){
+  token=d.token; userData=d;
+  localStorage.setItem('token',token);
+  localStorage.setItem('userData',JSON.stringify(d));
+}
+
+function logout(){
+  token=''; userData={};
+  localStorage.removeItem('token');
+  localStorage.removeItem('userData');
+  isGuest=false;
+  document.getElementById('cab-btn').style.display='none';
+  document.getElementById('login-btn-top').style.display='block';
+  showPage('pg-login');
+}
+
+async function loadCabinet(){
+  try{
+    const r=await fetch(`${API}/me`,{headers:{'Authorization':'Bearer '+token}});
+    const d=await r.json();
+    if(d.error){logout();return}
+    userData=d; localStorage.setItem('userData',JSON.stringify(d)); updateCounter();
+    // Аватар
+    const avatarWrap=document.getElementById('cab-avatar-wrap');
+    if(d.avatar){
+      avatarWrap.innerHTML=`<img class="cab-avatar" src="${d.avatar}" alt="">`;
+    } else {
+      const initials=(d.name||d.email||'?')[0].toUpperCase();
+      avatarWrap.innerHTML=`<div class="cab-avatar-placeholder">${initials}</div>`;
+    }
+    document.getElementById('cab-name').textContent=d.name||'';
+    document.getElementById('cab-email').textContent=d.email;
+    const isPaid=d.is_paid && d.paid_until && new Date(d.paid_until)>new Date();
+    document.getElementById('cab-status').textContent=isPaid?'Подписка активна ✦':'Бесплатный период';
+    document.getElementById('cab-status').className='sval'+(isPaid?' paid':'');
+    document.getElementById('cab-free').textContent=isPaid?'∞ Безлимит':d.free_left+' из 10';
+    document.getElementById('cab-pay-btn').className='pay-btn'+(isPaid?' hide':'');
+    if(d.paid_until){
+      const dt=new Date(d.paid_until);
+      document.getElementById('cab-until').textContent=dt.toLocaleDateString('ru-RU');
+      document.getElementById('cab-until-row').style.display=isPaid?'flex':'none';
+    }
+  }catch(e){}
+  try{
+    const r=await fetch(`${API}/history`,{headers:{'Authorization':'Bearer '+token}});
+    const items=await r.json();
+    const list=document.getElementById('hist-list');
+    if(!items.length){list.innerHTML='<div class="hist-empty">Генераций пока нет</div>';return}
+    list.innerHTML=items.map(it=>`<div class="hist-item"><div class="hist-niche">${it.niche||'—'} · ${it.archetype||''}</div><div class="hist-meta">${it.tone||''} · ${it.cat||''} · ${it.created_at}</div></div>`).join('');
+  }catch(e){}
+}
+
+// ── PAYMENT ──
+async function startPayment(){
+  if(isGuest||!token){showPage('pg-login');return}
+  try{
+    const r=await fetch(`${API}/create-payment`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({return_url:window.location.href})});
+    const d=await r.json();
+    if(d.payment_url)window.location.href=d.payment_url;
+    else alert('Ошибка создания платежа');
+  }catch(e){alert('Ошибка соединения')}
+}
+
+// ── ANALYZE ──
 async function analyzeNiche(){
   const niche=document.getElementById('niche').value.trim();
-  if(!niche){showErr('err1','Расскажи о своём блоге — хотя бы пару слов');return}
+  if(!niche){showErr('err1','Расскажи о своём блоге');return}
   hideErr('err1');
   const btn=document.getElementById('analyze-btn');
   btn.innerHTML='<span class="dot">·</span><span class="dot">·</span><span class="dot">·</span>';
   btn.disabled=true;
+
+  const headers={'Content-Type':'application/json'};
+  if(token) headers['Authorization']='Bearer '+token;
+
   try{
-    const res=await fetch(`${API_BASE}/analyze`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({niche})});
-    if(!res.ok)throw new Error();
-    archetypeData=await res.json();
-    if(archetypeData.error)throw new Error();
+    const r=await fetch(`${API}/analyze`,{method:'POST',headers,body:JSON.stringify({niche})});
+    if(r.status===401&&!isGuest){logout();return}
+    archetypeData=await r.json();
   }catch(e){
-    archetypeData={archetype:'—',why:'Сервер недоступен',deep_need:'—',shadow_fear:'—',visual_code:'—',hook_phrase:'—',content_vector:'—'};
-    showErr('err1','Сервер недоступен. Проверь Railway.');
+    archetypeData={archetype:'Эстет',why:'',deep_need:'—',shadow_fear:'—',visual_code:'—',hook_phrase:'—',content_vector:'—'};
   }
   document.getElementById('arch-name').textContent=archetypeData.archetype||'';
   document.getElementById('arch-why').textContent=archetypeData.why||'';
@@ -325,29 +603,26 @@ async function analyzeNiche(){
   document.getElementById('arch-visual').textContent=archetypeData.visual_code||'';
   document.getElementById('arch-vector').textContent=archetypeData.content_vector||'';
   document.getElementById('arch-hook').textContent=archetypeData.hook_phrase?`«${archetypeData.hook_phrase}»`:'';
-  document.getElementById('archetype-card').classList.add('show');
+  document.getElementById('arch-card').classList.add('show');
   document.getElementById('cats-label').classList.add('show');
   document.getElementById('cats-grid').classList.add('show');
-  btn.textContent='→';btn.disabled=false;
+  btn.textContent='→'; btn.disabled=false;
 }
 
 function pickCat(el,cat){
   document.querySelectorAll('.cat-card').forEach(c=>c.classList.remove('sel'));
-  el.classList.add('sel');selectedCat=cat;
+  el.classList.add('sel'); selectedCat=cat;
   document.getElementById('count-row').style.display='flex';
   document.getElementById('btn-next').classList.add('show');
 }
-
 function pickCount(el,n){
   document.querySelectorAll('.count-pill').forEach(p=>p.classList.remove('sel'));
-  el.classList.add('sel');selectedCount=n;
+  el.classList.add('sel'); selectedCount=n;
 }
-
 function pickTone(el,tone){
   document.querySelectorAll('.tone-pill').forEach(p=>p.classList.remove('sel'));
-  el.classList.add('sel');selectedTone=tone;
+  el.classList.add('sel'); selectedTone=tone;
 }
-
 function goStep2(){
   if(!selectedCat){showErr('err1','Выбери тип сторис');return}
   hideErr('err1');
@@ -356,113 +631,141 @@ function goStep2(){
   document.getElementById('cat-badge').textContent=CAT_LABELS[selectedCat];
   window.scrollTo({top:0,behavior:'smooth'});
 }
-
 function goBack(){
   document.getElementById('sc2').classList.remove('on');
   document.getElementById('sc1').classList.add('on');
   document.getElementById('result-wrap').classList.remove('show');
+  document.getElementById('paywall').classList.remove('show');
+  document.getElementById('reg-prompt').classList.remove('show');
+  document.getElementById('btn-restart').classList.remove('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function restartAll(){
+  selectedCat=null;selectedTone=null;selectedCount=3;archetypeData={};
+  document.getElementById('niche').value='';
+  document.getElementById('topic').value='';
+  document.getElementById('goal').value='';
+  document.querySelectorAll('.cat-card,.tone-pill').forEach(c=>c.classList.remove('sel'));
+  document.querySelectorAll('.count-pill').forEach((p,i)=>{p.classList.remove('sel');if(i===0)p.classList.add('sel')});
+  document.getElementById('arch-card').classList.remove('show');
+  document.getElementById('cats-label').classList.remove('show');
+  document.getElementById('cats-grid').classList.remove('show');
+  document.getElementById('count-row').style.display='none';
+  document.getElementById('btn-next').classList.remove('show');
+  document.getElementById('result-wrap').classList.remove('show');
+  document.getElementById('paywall').classList.remove('show');
+  document.getElementById('reg-prompt').classList.remove('show');
+  document.getElementById('btn-restart').classList.remove('show');
+  document.getElementById('sc2').classList.remove('on');
+  document.getElementById('sc1').classList.add('on');
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function parseAndRender(text, strategy){
-  // Strategy badge
-  document.getElementById('result-strategy').textContent = strategy ? `Стратегия: ${strategy}` : '';
-
-  // Parse HOOK
-  const hookMatch = text.match(/HOOK:\s*(.+?)(?:\n|$)/i);
-  if(hookMatch){
-    document.getElementById('hook-text').textContent = hookMatch[1].trim();
-    document.getElementById('hook-block').style.display='block';
-  }
-
-  // Parse STORIES
-  const storiesList = document.getElementById('stories-list');
-  storiesList.innerHTML='';
-  const storyRegex = /СТОРИС\s*(\d+)[^\n]*:\s*([\s\S]*?)(?=СТОРИС\s*\d+|ПОСТ:|CTA:|$)/gi;
-  let m;
-  while((m=storyRegex.exec(text))!==null){
-    const num=m[1], content=m[2].trim();
-    if(!content) continue;
-    const item=document.createElement('div');
-    item.className='story-item';
-    item.innerHTML=`<span class="story-num">Сторис ${num}</span><div class="story-text">${content.replace(/\n/g,'<br>')}</div>`;
-    storiesList.appendChild(item);
-  }
-
-  // Parse POST
-  const postMatch = text.match(/ПОСТ:\s*([\s\S]*?)(?=CTA:|$)/i);
-  if(postMatch && postMatch[1].trim()){
-    document.getElementById('post-text').textContent = postMatch[1].trim();
-    document.getElementById('post-block').style.display='block';
-  }
-
-  // Parse CTA
-  const ctaMatch = text.match(/CTA:\s*([\s\S]*?)$/i);
-  if(ctaMatch && ctaMatch[1].trim()){
-    document.getElementById('cta-text').textContent = ctaMatch[1].trim();
-    document.getElementById('cta-block').style.display='block';
-  }
-
-  document.getElementById('result-wrap').classList.add('show');
-  document.getElementById('result-wrap').scrollIntoView({behavior:'smooth',block:'start'});
-}
-
+// ── GENERATE ──
 async function generate(){
   const topic=document.getElementById('topic').value.trim();
   if(!topic){showErr('err2','Напиши ситуацию или тему');return}
   if(!selectedTone){showErr('err2','Выбери тональность');return}
   hideErr('err2');
+
+  // Гостевой лимит
+  if(isGuest && guestLeft <= 0){
+    document.getElementById('reg-prompt').classList.add('show');
+    return;
+  }
+
   const btn=document.getElementById('gen-btn');
+  const regenBtn=document.getElementById('btn-regen');
   btn.innerHTML='<span class="dot">·</span><span class="dot">·</span><span class="dot">·</span>';
-  btn.disabled=true;
+  btn.disabled=true; if(regenBtn)regenBtn.disabled=true;
   document.getElementById('result-wrap').classList.remove('show');
+  document.getElementById('paywall').classList.remove('show');
+  document.getElementById('reg-prompt').classList.remove('show');
   document.getElementById('hook-block').style.display='none';
   document.getElementById('post-block').style.display='none';
   document.getElementById('cta-block').style.display='none';
   document.getElementById('stories-list').innerHTML='';
 
+  const headers={'Content-Type':'application/json'};
+  if(token) headers['Authorization']='Bearer '+token;
+
+  const params={
+    niche:document.getElementById('niche').value.trim(),
+    archetype:archetypeData.archetype||'',
+    archetype_data:archetypeData,
+    cat:selectedCat, tone:selectedTone, topic,
+    goal:document.getElementById('goal').value.trim(),
+    count:selectedCount
+  };
+
   try{
-    const res=await fetch(`${API_BASE}/generate`,{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        niche:document.getElementById('niche').value.trim(),
-        archetype:archetypeData.archetype||'',
-        archetype_data:archetypeData,
-        cat:selectedCat,tone:selectedTone,topic,
-        goal:document.getElementById('goal').value.trim(),
-        count:selectedCount
-      })
-    });
-    if(!res.ok)throw new Error();
-    const data=await res.json();
-    parseAndRender(data.result||'', data.strategy||'');
+    const r=await fetch(`${API}/generate`,{method:'POST',headers,body:JSON.stringify(params)});
+    if(r.status===401&&!isGuest){logout();return}
+    const d=await r.json();
+
+    if(d.need_payment){document.getElementById('paywall').classList.add('show');return}
+    if(d.error){showErr('err2',d.error);return}
+
+    // Обновляем счётчики
+    if(isGuest){
+      guestLeft--;
+      sessionStorage.setItem('guestLeft', guestLeft);
+      updateGuestCounter();
+      if(guestLeft<=0){
+        setTimeout(()=>document.getElementById('reg-prompt').classList.add('show'),1000);
+      }
+    } else {
+      if(typeof d.free_left!=='undefined')userData.free_left=d.free_left;
+      if(typeof d.is_paid!=='undefined')userData.is_paid=d.is_paid;
+      if(d.paid_until)userData.paid_until=d.paid_until;
+      localStorage.setItem('userData',JSON.stringify(userData));
+      updateCounter();
+    }
+
+    parseAndRender(d.result||'', d.strategy||'');
+    document.getElementById('btn-restart').classList.add('show');
   }catch(e){
-    showErr('err2','Ошибка подключения к серверу.');
+    showErr('err2','Ошибка соединения с сервером.');
   }
-  btn.textContent='Создать сторис →';btn.disabled=false;
+  btn.textContent='Создать сторис →'; btn.disabled=false;
+  if(regenBtn)regenBtn.disabled=false;
+}
+
+function parseAndRender(text,strategy){
+  document.getElementById('strategy-tag').textContent=strategy?`Стратегия: ${strategy}`:'';
+  const hookM=text.match(/HOOK:\s*(.+?)(?:\n|$)/i);
+  if(hookM){document.getElementById('hook-text').textContent=hookM[1].trim();document.getElementById('hook-block').style.display='block'}
+  const list=document.getElementById('stories-list');list.innerHTML='';
+  const sr=/СТОРИС\s*(\d+)[^\n]*:\s*([\s\S]*?)(?=СТОРИС\s*\d+|ПОСТ:|CTA:|$)/gi;
+  let m;
+  while((m=sr.exec(text))!==null){
+    const c=m[2].trim();if(!c)continue;
+    const el=document.createElement('div');el.className='story-item';
+    el.innerHTML=`<span class="story-num">Сторис ${m[1]}</span><div class="story-text">${c.replace(/\n/g,'<br>')}</div>`;
+    list.appendChild(el);
+  }
+  const pm=text.match(/ПОСТ:\s*([\s\S]*?)(?=CTA:|$)/i);
+  if(pm&&pm[1].trim()){document.getElementById('post-text').textContent=pm[1].trim();document.getElementById('post-block').style.display='block'}
+  const cm=text.match(/CTA:\s*([\s\S]*?)$/i);
+  if(cm&&cm[1].trim()){document.getElementById('cta-text').textContent=cm[1].trim();document.getElementById('cta-block').style.display='block'}
+  document.getElementById('result-wrap').classList.add('show');
+  document.getElementById('result-wrap').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function copyRes(){
   const parts=[];
-  const hook=document.getElementById('hook-text').textContent;
-  if(hook) parts.push('HOOK: '+hook);
+  const h=document.getElementById('hook-text').textContent;if(h)parts.push('HOOK: '+h);
   document.querySelectorAll('.story-item').forEach(s=>{
-    const num=s.querySelector('.story-num').textContent;
-    const txt=s.querySelector('.story-text').innerText;
-    parts.push(num+':\n'+txt);
+    parts.push(s.querySelector('.story-num').textContent+':\n'+s.querySelector('.story-text').innerText);
   });
-  const post=document.getElementById('post-text').textContent;
-  if(post) parts.push('ПОСТ:\n'+post);
-  const cta=document.getElementById('cta-text').textContent;
-  if(cta) parts.push('CTA: '+cta);
+  const p=document.getElementById('post-text').textContent;if(p)parts.push('ПОСТ:\n'+p);
+  const c=document.getElementById('cta-text').textContent;if(c)parts.push('CTA: '+c);
   navigator.clipboard.writeText(parts.join('\n\n')).then(()=>{
-    const btn=document.getElementById('copy-btn');
+    const btn=document.querySelector('.btn-copy-res');
     btn.textContent='Скопировано ✦';
-    setTimeout(()=>btn.textContent='Скопировать текст',2000);
+    setTimeout(()=>btn.textContent='Скопировать',2000);
   });
 }
-
-document.getElementById('niche').addEventListener('keydown',e=>{if(e.key==='Enter')analyzeNiche()});
 </script>
 </body>
 </html>
