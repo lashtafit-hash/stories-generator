@@ -263,10 +263,16 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
       <div class="oferta-note" id="cab-pay-note" style="display:none">Безлимит на весь месяц ✦</div>
       <div class="oferta-note"><a href="/oferta.html" target="_blank">Условия оферты</a></div>
     </div>
-    <button class="btn-pink" onclick="showPage('pg-app')">Создавать сторис →</button>
-    <div style="text-align:center;margin-top:10px;font-size:11px;color:var(--muted)">
-      iPhone: Safari → Поделиться → «На экран Домой» ✦<br>
-      Android: Chrome предложит установить автоматически
+    <div style="display:flex;gap:8px;margin-bottom:0">
+      <button class="btn-pink" onclick="showPage('pg-app')" style="flex:1">Создавать сторис →</button>
+    </div>
+    <div style="background:var(--pink3);border:1px solid var(--pb);border-radius:2px;padding:16px 18px;margin-top:12px;text-align:center">
+      <div style="font-size:10px;letter-spacing:.3em;color:var(--pink);text-transform:uppercase;font-weight:600;margin-bottom:8px">Установить приложение</div>
+      <div style="font-size:12px;color:var(--muted);font-weight:300;line-height:1.7;margin-bottom:12px">
+        <strong style="color:var(--ink)">iPhone Safari:</strong> нажми 􀈂 → «На экран Домой»<br>
+        <strong style="color:var(--ink)">Android Chrome:</strong> меню ⋮ → «Установить приложение»
+      </div>
+      <button id="install-btn-cab" class="btn-sm" onclick="installPWA()" style="width:100%;padding:10px">+ Установить на экран</button>
     </div>
 
     <div class="hist-section">
@@ -721,22 +727,30 @@ function copyRes(){
 
 // PWA Install
 let deferredPrompt = null;
+const isIOS = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+const isInStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
 window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
   deferredPrompt = e;
   const btn = document.getElementById('install-btn');
   if(btn) btn.style.display = 'block';
 });
+
 function installPWA(){
   if(deferredPrompt){
     deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(()=>{ deferredPrompt=null; document.getElementById('install-btn').style.display='none'; });
+    deferredPrompt.userChoice.then(()=>{ deferredPrompt=null; });
+  } else if(isIOS){
+    alert('На iPhone:\n1. Нажми кнопку «Поделиться» (квадрат со стрелкой) внизу Safari\n2. Выбери «На экран Домой»\n3. Нажми «Добавить» ✦');
   } else {
-    // iOS - show manual instruction
-    alert('На iPhone: нажми кнопку «Поделиться» внизу Safari → «На экран Домой» ✦');
+    alert('В Chrome: нажми меню ⋮ → «Установить приложение»');
   }
 }
-window.addEventListener('appinstalled', ()=>{ document.getElementById('install-btn').style.display='none'; });
+window.addEventListener('appinstalled', ()=>{
+  const btn = document.getElementById('install-btn');
+  if(btn) btn.style.display='none';
+});
 })();
 </script>
 </body>
