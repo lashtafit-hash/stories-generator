@@ -255,7 +255,11 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
       <div class="status-row"><span class="slbl">Статус</span><span class="sval" id="cab-status"></span></div>
       <div class="status-row"><span class="slbl">Генераций осталось</span><span class="sval" id="cab-free"></span></div>
       <div class="status-row" id="cab-until-row" style="display:none"><span class="slbl">Подписка до</span><span class="sval" id="cab-until" style="font-size:14px"></span></div>
-      <button class="pay-btn" id="cab-pay-btn" onclick="startPayment()">Оформить подписку — 199 ₽/мес →</button>
+      <label style="display:flex;align-items:flex-start;gap:8px;margin-top:14px;cursor:pointer;font-size:12px;color:var(--muted);font-weight:300;line-height:1.5">
+        <input type="checkbox" id="oferta-check-cab" style="margin-top:2px;accent-color:var(--pink);flex-shrink:0">
+        <span>Я принимаю <a href="/oferta.html" target="_blank" style="color:var(--pink)">условия оферты</a></span>
+      </label>
+      <button class="pay-btn" id="cab-pay-btn" onclick="startPayment('cab')" style="margin-top:8px">Оформить подписку — 199 ₽/мес →</button>
       <div class="oferta-note" id="cab-pay-note" style="display:none">Безлимит на весь месяц ✦</div>
       <div class="oferta-note"><a href="/oferta.html" target="_blank">Условия оферты</a></div>
     </div>
@@ -363,7 +367,11 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
         <div class="paywall-sub">Оформи подписку и получи безлимитный доступ на весь месяц</div>
         <div class="paywall-price">199 ₽</div>
         <div class="paywall-period">в месяц · безлимит · отмена в любой момент</div>
-        <button class="pay-btn" onclick="startPayment()">Оформить подписку →</button>
+        <label style="display:flex;align-items:flex-start;gap:8px;margin-bottom:10px;cursor:pointer;font-size:12px;color:var(--muted);font-weight:300;line-height:1.5;text-align:left">
+          <input type="checkbox" id="oferta-check-wall" style="margin-top:2px;accent-color:var(--pink);flex-shrink:0">
+          <span>Я принимаю <a href="/oferta.html" target="_blank" style="color:var(--pink)">условия оферты</a></span>
+        </label>
+        <button class="pay-btn" onclick="startPayment('wall')">Оформить подписку →</button>
         <div class="oferta-note" style="margin-top:10px"><a href="/oferta.html" target="_blank">Условия оферты</a></div>
       </div>
 

@@ -35,7 +35,7 @@ def init_db():
             google_id TEXT,
             name TEXT,
             avatar TEXT,
-            free_left INTEGER DEFAULT 7,
+            free_left INTEGER DEFAULT 3,
             is_paid BOOLEAN DEFAULT FALSE,
             paid_until TIMESTAMP,
             total_generated INTEGER DEFAULT 0,
