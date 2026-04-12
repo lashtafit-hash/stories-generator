@@ -400,12 +400,12 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
 </div>
 <script>
 const API = "https://web-production-3a26.up.railway.app";
-const GUEST_LIMIT = 3;
+const GUEST_LIMIT = 10;
 
 let token = localStorage.getItem("token") || "";
 let userData = {};
 let isGuest = false;
-let guestLeft = parseInt(sessionStorage.getItem("guestLeft") ?? GUEST_LIMIT);
+let guestLeft = parseInt(localStorage.getItem("guestLeft") ?? GUEST_LIMIT);
 
 let archetypeData={}, selectedCat=null, selectedTone=null, selectedCount=3;
 const CAT_LABELS={sell:'✦ Продающие',warmup:'◈ Прогрев',life:'✿ Лайф',expert:'◇ Экспертные'};
@@ -435,6 +435,7 @@ const CAT_LABELS={sell:'✦ Продающие',warmup:'◈ Прогрев',life
 
   const saved = localStorage.getItem('userData');
   if(token && saved){
+    localStorage.removeItem('guestLeft');
     userData = JSON.parse(saved);
     showLoggedIn();
     showPage('pg-app');
@@ -465,6 +466,7 @@ function showLoggedIn(){
 
 function initGuest(){
   isGuest = true;
+  guestLeft = parseInt(localStorage.getItem('guestLeft') ?? GUEST_LIMIT);
   updateGuestCounter();
 }
 
