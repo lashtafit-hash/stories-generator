@@ -378,7 +378,6 @@ CTA:\n[текст]
 
 
 @app.route("/analyze", methods=["POST"])
-@require_auth
 def analyze():
     niche = (request.json or {}).get("niche","")
     if not niche: return jsonify({"error":"Ниша не указана"}), 400
