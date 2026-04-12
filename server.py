@@ -383,7 +383,7 @@ def analyze():
     if not niche: return jsonify({"error":"Ниша не указана"}), 400
     try:
         import re as _re, json as _json
-        result = call_deepseek(ARCHETYPE_SYSTEM, f"Определи архетип ЦА: {niche}", 600)
+        result = call_deepseek(ARCHETYPE_SYSTEM, f"Определи архетип ЦА: {niche}", 400)
         clean  = _re.sub(r"```json|```","",result).strip()
         return jsonify(_json.loads(clean))
     except Exception as e:
@@ -419,7 +419,7 @@ def generate():
 Напиши {count} сторис. Только текст для экрана."""
 
     try:
-        result = call_deepseek(GENERATOR_SYSTEM, prompt, 1600)
+        result = call_deepseek(GENERATOR_SYSTEM, prompt, 1100)
         conn = get_db(); cur = conn.cursor()
         now = datetime.datetime.utcnow()
         if not u["is_paid"] or not u["paid_until"] or u["paid_until"] <= now:

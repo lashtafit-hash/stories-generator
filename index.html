@@ -260,6 +260,10 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
       <div class="oferta-note"><a href="/oferta.html" target="_blank">Условия оферты</a></div>
     </div>
     <button class="btn-pink" onclick="showPage('pg-app')">Создавать сторис →</button>
+    <div style="text-align:center;margin-top:10px;font-size:11px;color:var(--muted)">
+      iPhone: Safari → Поделиться → «На экран Домой» ✦<br>
+      Android: Chrome предложит установить автоматически
+    </div>
 
     <div class="hist-section">
       <span class="hist-title">История генераций</span>
@@ -512,6 +516,9 @@ async function analyzeNiche(){
   const btn=document.getElementById('analyze-btn');
   btn.innerHTML='<span class="dot">·</span><span class="dot">·</span><span class="dot">·</span>';
   btn.disabled=true;
+  document.getElementById('err1').textContent='Определяем архетип твоей аудитории...';
+  document.getElementById('err1').classList.add('show');
+  document.getElementById('err1').style.color='var(--muted)';
   try{
     const r=await fetch(`${API}/analyze`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({niche})});
     if(r.status===401){logout();return}
@@ -596,6 +603,9 @@ async function generate(){
   const regenBtn=document.getElementById('btn-regen');
   btn.innerHTML='<span class="dot">·</span><span class="dot">·</span><span class="dot">·</span>';
   btn.disabled=true;
+  document.getElementById('err1').textContent='Определяем архетип твоей аудитории...';
+  document.getElementById('err1').classList.add('show');
+  document.getElementById('err1').style.color='var(--muted)';
   if(regenBtn)regenBtn.disabled=true;
   document.getElementById('result-wrap').classList.remove('show');
   document.getElementById('paywall').classList.remove('show');
@@ -700,6 +710,25 @@ function copyRes(){
     showPage('pg-app');
   }
   document.getElementById('niche').addEventListener('keydown',e=>{if(e.key==='Enter')analyzeNiche()});
+
+// PWA Install
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const btn = document.getElementById('install-btn');
+  if(btn) btn.style.display = 'block';
+});
+function installPWA(){
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(()=>{ deferredPrompt=null; document.getElementById('install-btn').style.display='none'; });
+  } else {
+    // iOS - show manual instruction
+    alert('На iPhone: нажми кнопку «Поделиться» внизу Safari → «На экран Домой» ✦');
+  }
+}
+window.addEventListener('appinstalled', ()=>{ document.getElementById('install-btn').style.display='none'; });
 })();
 </script>
 </body>
