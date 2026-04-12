@@ -1,21 +1,21 @@
 {
   "name": "ME•CODE Stories",
   "short_name": "Stories",
-  "description": "Генератор сторис для Instagram с архетипами и профессиональными стилями",
-  "start_url": "/",
+  "description": "Генератор сторис для Instagram",
+  "start_url": "/stories-generator/",
   "display": "standalone",
   "background_color": "#0a0a0a",
   "theme_color": "#ff3e7f",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/icons/mecode_192.png",
+      "src": "/stories-generator/icons/mecode_192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icons/mecode_512.png",
+      "src": "/stories-generator/icons/mecode_512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
