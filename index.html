@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ME•CODE Stories</title>
-<link rel="manifest" href="/stories-generator/manifest.json">
+<link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#ff3e7f">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Stories">
-<link rel="apple-touch-icon" href="/stories-generator/icons/mecode_512.png">
+<link rel="apple-touch-icon" href="/icons/mecode_512.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -526,6 +526,12 @@ async function startPayment(){
 async function analyzeNiche(){
   const niche=document.getElementById('niche').value.trim();
   if(!niche){showErr('err1','Расскажи о своём блоге');return}
+  // Гостевой лимит исчерпан - показываем форму регистрации
+  if(isGuest && guestLeft <= 0){
+    showErr('err1','Бесплатные попытки закончились. Зарегистрируйся чтобы продолжить!');
+    showPage('pg-register');
+    return;
+  }
   hideErr('err1');
   const btn=document.getElementById('analyze-btn');
   btn.innerHTML='<span class="dot">·</span><span class="dot">·</span><span class="dot">·</span>';
@@ -615,11 +621,10 @@ async function generate(){
 
   const btn=document.getElementById('gen-btn');
   const regenBtn=document.getElementById('btn-regen');
-  btn.innerHTML='<span class="dot">·</span><span class="dot">·</span><span class="dot">·</span>';
+  btn.innerHTML='Создаём сторис <span class="dot">·</span><span class="dot">·</span><span class="dot">·</span>';
   btn.disabled=true;
-  document.getElementById('err1').textContent='Определяем архетип твоей аудитории...';
-  document.getElementById('err1').classList.add('show');
-  document.getElementById('err1').style.color='var(--muted)';
+  showErr('err2','Обычно занимает 20–40 секунд, подожди ✦');
+  document.getElementById('err2').style.color='var(--muted)';
   if(regenBtn)regenBtn.disabled=true;
   document.getElementById('result-wrap').classList.remove('show');
   document.getElementById('paywall').classList.remove('show');
@@ -659,9 +664,12 @@ async function generate(){
     localStorage.setItem('userData',JSON.stringify(userData));
     updateCounter();
 
+    hideErr('err2');
+    document.getElementById('err2').style.color='var(--pink2)';
     parseAndRender(d.result||'',d.strategy||'');
     document.getElementById('btn-restart').classList.add('show');
   }catch(e){
+    document.getElementById('err2').style.color='var(--pink2)';
     showErr('err2','Ошибка соединения с сервером.');
   }
   btn.textContent='Создать сторис →';btn.disabled=false;
