@@ -452,9 +452,15 @@ function updateGuestCounter(){
   el.style.display='block';
 }
 
+function hideGuestPrompt(){
+  const rp=document.getElementById('reg-prompt');
+  if(rp)rp.style.display='none';
+}
+
 function showLoggedIn(){
   isGuest=false;
   localStorage.removeItem('guestLeft');
+  hideGuestPrompt();
   const cb=document.getElementById('cab-btn');
   const lb=document.getElementById('login-btn-top');
   if(cb)cb.style.display='block';
@@ -504,6 +510,7 @@ function logout(){
   localStorage.removeItem('userData');
   isGuest=true;
   guestLeft=parseInt(localStorage.getItem('guestLeft')??GUEST_LIMIT);
+  hideGuestPrompt();
   const cb=document.getElementById('cab-btn');
   const lb=document.getElementById('login-btn-top');
   if(cb)cb.style.display='none';
@@ -558,6 +565,7 @@ async function loadCabinet(){
     if(d.error){logout();return}
     userData=d;
     localStorage.setItem('userData',JSON.stringify(d));
+    hideGuestPrompt();
     updateCounter();
 
     document.getElementById('cab-email').textContent=d.email;
@@ -668,6 +676,7 @@ function goBack(){
 function restartAll(){
   // Сброс всего в ноль
   selectedCat=null;selectedTone=null;selectedCount=3;archetypeData={};lastGenParams=null;
+  hideGuestPrompt();
   document.getElementById('niche').value='';
   document.getElementById('topic').value='';
   document.getElementById('goal').value='';
@@ -692,6 +701,7 @@ async function generate(){
   const topic=document.getElementById('topic').value.trim();
   if(!topic){showErr('err2','Напиши ситуацию или тему');return}
   if(!selectedTone){showErr('err2','Выбери тональность');return}
+  if(!isGuest)hideGuestPrompt();
   hideErr('err2');
 
   if(isGuest&&guestLeft<=0){
