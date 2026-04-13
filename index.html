@@ -407,7 +407,10 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
 
 </div>
 <script>
-const API = "https://web-production-3a26.up.railway.app";
+const REMOTE_API = "https://web-production-3a26.up.railway.app";
+const API = (window.location.protocol === 'file:' || ['localhost','127.0.0.1'].includes(window.location.hostname))
+  ? 'http://127.0.0.1:5000'
+  : REMOTE_API;
 let token = localStorage.getItem("token") || "";
 let userData = {};
 const GUEST_LIMIT = 3;
