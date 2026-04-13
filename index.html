@@ -287,7 +287,6 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
       <div class="app-logo">ME•CODE</div>
       <div class="app-top-right">
         <div class="counter" id="top-counter"></div>
-        <button class="btn-sm" id="install-btn" onclick="installPWA()" style="display:none">+ На экран</button>
         <button class="btn-sm" id="cab-btn" onclick="showPage('pg-cabinet')" style="display:none">Кабинет</button>
         <button class="btn-sm" id="login-btn-top" onclick="showPage('pg-login')">Войти</button>
       </div>
@@ -371,11 +370,11 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
       <button class="btn-restart" id="btn-restart" onclick="restartAll()">← Начать заново</button>
 
       <div id="reg-prompt" style="display:none;background:var(--s1);border:1px solid var(--s3);border-radius:2px;padding:28px 22px;text-align:center;margin-top:18px">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:var(--ink);margin-bottom:8px">3 из 3 использованы ✦</div>
-        <div style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.6;margin-bottom:16px">Бесплатные попытки закончились.<br>Зарегистрируйся и получи ещё 3 генерации бесплатно!</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--pink);font-style:italic;margin-bottom:20px">+ 3 генерации бесплатно</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:var(--ink);margin-bottom:10px">Бесплатные попытки закончились</div>
+        <div style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;margin-bottom:16px">Зарегистрируйся бесплатно<br>и получи ещё 3 генерации!</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--pink);font-style:italic;margin-bottom:20px">+ 3 генерации бесплатно ✦</div>
         <button class="btn-pink" onclick="showPage('pg-register')" style="margin-bottom:10px">Зарегистрироваться →</button>
-        <div style="font-size:12px;color:var(--muted);margin-top:10px">Уже есть аккаунт? <a onclick="showPage('pg-login')" style="color:var(--pink);cursor:pointer">Войти</a></div>
+        <div style="font-size:12px;color:var(--muted);margin-top:8px">Уже есть аккаунт? <a onclick="showPage('pg-login')" style="color:var(--pink);cursor:pointer">Войти</a></div>
       </div>
 
       <div class="paywall" id="paywall">
@@ -436,15 +435,16 @@ function updateCounter(){
     el.textContent='∞ Безлимит';
     el.className='counter unlimited';
   } else {
-    el.textContent=`${userData.free_left??0} из 10`;
+    el.textContent=`${userData.free_left??0} из 3`;
     el.className='counter';
   }
+  el.style.display='block';
 }
 
 function updateGuestCounter(){
   const el=document.getElementById('top-counter');
   if(!el)return;
-  el.textContent=`${guestLeft} из ${GUEST_LIMIT}`;
+  el.textContent=guestLeft+' из '+GUEST_LIMIT;
   el.className='counter';
   el.style.display='block';
 }
@@ -579,7 +579,7 @@ async function analyzeNiche(){
     const ah={'Content-Type':'application/json'};
     if(token)ah['Authorization']='Bearer '+token;
     const r=await fetch(`${API}/analyze`,{method:'POST',headers:ah,body:JSON.stringify({niche})});
-    if(r.status===401){logout();return}
+    if(r.status===401&&!isGuest){logout();return}
     archetypeData=await r.json();
   }catch(e){
     archetypeData={archetype:'Эстет',why:'Нет связи',deep_need:'—',shadow_fear:'—',visual_code:'—',hook_phrase:'—',content_vector:'—'};
@@ -657,6 +657,12 @@ async function generate(){
   if(!selectedTone){showErr('err2','Выбери тональность');return}
   hideErr('err2');
 
+  if(isGuest&&guestLeft<=0){
+    const rp=document.getElementById('reg-prompt');
+    if(rp){rp.style.display='block';rp.scrollIntoView({behavior:'smooth',block:'start'});}
+    return;
+  }
+
   const btn=document.getElementById('gen-btn');
   const regenBtn=document.getElementById('btn-regen');
   btn.innerHTML='Создаём сторис <span class="dot">·</span><span class="dot">·</span><span class="dot">·</span>';
@@ -682,12 +688,14 @@ async function generate(){
   lastGenParams=params;
 
   try{
+    const gh={'Content-Type':'application/json'};
+    if(token)gh['Authorization']='Bearer '+token;
     const r=await fetch(`${API}/generate`,{
       method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      headers:gh,
       body:JSON.stringify(params)
     });
-    if(r.status===401){logout();return}
+    if(r.status===401&&!isGuest){logout();return}
     const d=await r.json();
 
     if(d.need_payment){
@@ -701,8 +709,8 @@ async function generate(){
       localStorage.setItem('guestLeft',guestLeft);
       updateGuestCounter();
       if(guestLeft<=0){
-        setTimeout(()=>{
-          const rp=document.getElementById('reg-prompt');
+        setTimeout(function(){
+          var rp=document.getElementById('reg-prompt');
           if(rp){rp.style.display='block';rp.scrollIntoView({behavior:'smooth',block:'start'});}
         },800);
       }
@@ -763,51 +771,23 @@ function copyRes(){
 
 // ── INIT ──
 (function(){
-  const saved=localStorage.getItem('userData');
+  var saved=localStorage.getItem('userData');
   if(token&&saved){
     userData=JSON.parse(saved);
     isGuest=false;
     localStorage.removeItem('guestLeft');
-    const cb=document.getElementById('cab-btn');
-    const lb=document.getElementById('login-btn-top');
+    var cb=document.getElementById('cab-btn');
+    var lb=document.getElementById('login-btn-top');
     if(cb)cb.style.display='block';
     if(lb)lb.style.display='none';
     updateCounter();
-    showPage('pg-app');
   } else {
     isGuest=true;
     guestLeft=parseInt(localStorage.getItem('guestLeft')??GUEST_LIMIT);
     updateGuestCounter();
-    showPage('pg-app');
   }
-  document.getElementById('niche').addEventListener('keydown',e=>{if(e.key==='Enter')analyzeNiche()});
-
-// PWA Install
-let deferredPrompt = null;
-const isIOS = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
-const isInStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredPrompt = e;
-  const btn = document.getElementById('install-btn');
-  if(btn) btn.style.display = 'block';
-});
-
-function installPWA(){
-  if(deferredPrompt){
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(()=>{ deferredPrompt=null; });
-  } else if(isIOS){
-    alert('На iPhone:\n1. Нажми кнопку «Поделиться» (квадрат со стрелкой) внизу Safari\n2. Выбери «На экран Домой»\n3. Нажми «Добавить» ✦');
-  } else {
-    alert('В Chrome: нажми меню ⋮ → «Установить приложение»');
-  }
-}
-window.addEventListener('appinstalled', ()=>{
-  const btn = document.getElementById('install-btn');
-  if(btn) btn.style.display='none';
-});
+  showPage('pg-app');
+  document.getElementById('niche').addEventListener('keydown',function(e){if(e.key==='Enter')analyzeNiche();});
 })();
 </script>
 </body>
