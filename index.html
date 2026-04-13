@@ -444,7 +444,7 @@ function updateCounter(){
 function updateGuestCounter(){
   const el=document.getElementById('top-counter');
   if(!el)return;
-  el.textContent=guestLeft+' из '+GUEST_LIMIT;
+  el.textContent=`${Math.max(guestLeft,0)} из ${GUEST_LIMIT}`;
   el.className='counter';
   el.style.display='block';
 }
@@ -499,12 +499,53 @@ function logout(){
   token='';userData={};
   localStorage.removeItem('token');
   localStorage.removeItem('userData');
-  isGuest=false;
+  isGuest=true;
+  guestLeft=parseInt(localStorage.getItem('guestLeft')??GUEST_LIMIT);
   const cb=document.getElementById('cab-btn');
   const lb=document.getElementById('login-btn-top');
   if(cb)cb.style.display='none';
   if(lb)lb.style.display='block';
+  updateGuestCounter();
   showPage('pg-login');
+}
+
+function setMultilineText(el,text){
+  el.textContent=text||'';
+  el.style.whiteSpace='pre-line';
+}
+
+function formatHistoryDate(value){
+  const dt=new Date(value);
+  if(Number.isNaN(dt.getTime()))return value||'';
+  return dt.toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+}
+
+function renderHistory(items){
+  const list=document.getElementById('hist-list');
+  list.innerHTML='';
+  if(!items.length){
+    const empty=document.createElement('div');
+    empty.className='hist-empty';
+    empty.textContent='Генераций пока нет';
+    list.appendChild(empty);
+    return;
+  }
+  items.forEach(it=>{
+    const item=document.createElement('div');
+    item.className='hist-item';
+
+    const niche=document.createElement('div');
+    niche.className='hist-niche';
+    niche.textContent=`${it.niche||'—'} · ${it.archetype||''}`;
+
+    const meta=document.createElement('div');
+    meta.className='hist-meta';
+    meta.textContent=`${it.tone||''} · ${it.cat||''} · ${formatHistoryDate(it.created_at)}`;
+
+    item.appendChild(niche);
+    item.appendChild(meta);
+    list.appendChild(item);
+  });
 }
 
 async function loadCabinet(){
@@ -520,7 +561,7 @@ async function loadCabinet(){
     const isPaid=d.is_paid && d.paid_until && new Date(d.paid_until)>new Date();
     document.getElementById('cab-status').textContent=isPaid?'Подписка активна ✦':'Бесплатный период';
     document.getElementById('cab-status').className='sval'+(isPaid?' paid':'');
-    document.getElementById('cab-free').textContent=isPaid?'∞ Безлимит':d.free_left+' из 10';
+    document.getElementById('cab-free').textContent=isPaid?'∞ Безлимит':`${d.free_left??0} из 3`;
     document.getElementById('cab-pay-btn').className='pay-btn'+(isPaid?' hide':'');
     document.getElementById('cab-pay-note').style.display=isPaid?'block':'none';
     if(d.paid_until){
@@ -533,14 +574,7 @@ async function loadCabinet(){
   try{
     const r=await fetch(`${API}/history`,{headers:{'Authorization':'Bearer '+token}});
     const items=await r.json();
-    const list=document.getElementById('hist-list');
-    if(!items.length){list.innerHTML='<div class="hist-empty">Генераций пока нет</div>';return}
-    list.innerHTML=items.map(it=>`
-      <div class="hist-item">
-        <div class="hist-niche">${it.niche||'—'} · ${it.archetype||''}</div>
-        <div class="hist-meta">${it.tone||''} · ${it.cat||''} · ${it.created_at}</div>
-      </div>
-    `).join('');
+    renderHistory(Array.isArray(items)?items:[]);
   }catch(e){}
 }
 
@@ -572,7 +606,7 @@ async function analyzeNiche(){
   const btn=document.getElementById('analyze-btn');
   btn.innerHTML='<span class="dot">·</span><span class="dot">·</span><span class="dot">·</span>';
   btn.disabled=true;
-  document.getElementById('err1').textContent='Определяем архетип твоей аудитории...';
+  document.getElementById('err1').textContent='Смотрим, кто именно твоя ЦА: определяем главный и второй архетип...';
   document.getElementById('err1').classList.add('show');
   document.getElementById('err1').style.color='var(--muted)';
   try{
@@ -582,7 +616,7 @@ async function analyzeNiche(){
     if(r.status===401&&!isGuest){logout();return}
     archetypeData=await r.json();
   }catch(e){
-    archetypeData={archetype:'Эстет',why:'Нет связи',deep_need:'—',shadow_fear:'—',visual_code:'—',hook_phrase:'—',content_vector:'—'};
+    archetypeData={archetype:'Правитель + Эстет',why:'Связь с сервером пропала, поэтому показали базовый архетип.',deep_need:'Нужен сильный результат и ощущение уровня.',shadow_fear:'Потратить время на слабый и безликий продукт.',visual_code:'Чистый визуал, статус, точность.',hook_phrase:'Люди покупают то, что считывается как уровень.',content_vector:'Контраст, разбор качества, уверенная экспертность.'};
   }
   document.getElementById('arch-name').textContent=archetypeData.archetype||'';
   document.getElementById('arch-why').textContent=archetypeData.why||'';
@@ -667,7 +701,7 @@ async function generate(){
   const regenBtn=document.getElementById('btn-regen');
   btn.innerHTML='Создаём сторис <span class="dot">·</span><span class="dot">·</span><span class="dot">·</span>';
   btn.disabled=true;
-  showErr('err2','Обычно занимает 20–40 секунд, подожди ✦');
+  showErr('err2',`Подождите, генерируем гениальные сторис на ${selectedCount} экранов. Обычно это занимает 15–30 секунд ✦`);
   document.getElementById('err2').style.color='var(--muted)';
   if(regenBtn)regenBtn.disabled=true;
   document.getElementById('result-wrap').classList.remove('show');
@@ -705,7 +739,7 @@ async function generate(){
     if(d.error){showErr('err2',d.error);return}
 
     if(isGuest){
-      guestLeft--;
+      guestLeft=Math.max(guestLeft-1,0);
       localStorage.setItem('guestLeft',guestLeft);
       updateGuestCounter();
       if(guestLeft<=0){
@@ -743,13 +777,20 @@ function parseAndRender(text,strategy){
   while((m=sr.exec(text))!==null){
     const c=m[2].trim();if(!c)continue;
     const el=document.createElement('div');el.className='story-item';
-    el.innerHTML=`<span class="story-num">Сторис ${m[1]}</span><div class="story-text">${c.replace(/\n/g,'<br>')}</div>`;
+    const num=document.createElement('span');
+    num.className='story-num';
+    num.textContent=`Сторис ${m[1]}`;
+    const body=document.createElement('div');
+    body.className='story-text';
+    setMultilineText(body,c);
+    el.appendChild(num);
+    el.appendChild(body);
     list.appendChild(el);
   }
   const pm=text.match(/ПОСТ:\s*([\s\S]*?)(?=CTA:|$)/i);
-  if(pm&&pm[1].trim()){document.getElementById('post-text').textContent=pm[1].trim();document.getElementById('post-block').style.display='block'}
+  if(pm&&pm[1].trim()){setMultilineText(document.getElementById('post-text'),pm[1].trim());document.getElementById('post-block').style.display='block'}
   const cm=text.match(/CTA:\s*([\s\S]*?)$/i);
-  if(cm&&cm[1].trim()){document.getElementById('cta-text').textContent=cm[1].trim();document.getElementById('cta-block').style.display='block'}
+  if(cm&&cm[1].trim()){setMultilineText(document.getElementById('cta-text'),cm[1].trim());document.getElementById('cta-block').style.display='block'}
   document.getElementById('result-wrap').classList.add('show');
   document.getElementById('result-wrap').scrollIntoView({behavior:'smooth',block:'start'});
 }
