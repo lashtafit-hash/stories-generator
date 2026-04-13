@@ -485,13 +485,24 @@ def analyze():
 
 
 @app.route("/generate", methods=["POST"])
-@require_auth
 def generate():
-    u = get_user(request.user_id)
-    if not u: return jsonify({"error":"Пользователь не найден"}), 404
-    ok, reason = check_access(u)
-    if not ok:
-        return jsonify({"error": reason, "need_payment": True}), 402
+    # Гостевой режим — без токена, считаем на фронте
+    auth = request.headers.get("Authorization","").replace("Bearer ","").strip()
+    if not auth:
+        # Гость — просто генерируем без проверки лимита на сервере
+        u = None
+    else:
+        try:
+            p = jwt.decode(auth, JWT_SECRET, algorithms=["HS256"])
+            request.user_id = p["user_id"]
+            u = get_user(request.user_id)
+        except:
+            u = None
+
+    if u:
+        ok, reason = check_access(u)
+        if not ok:
+            return jsonify({"error": reason, "need_payment": True}), 402
 
     body = request.json or {}
     cat  = body.get("cat", "life")
@@ -529,32 +540,42 @@ def generate():
     try:
         result = call_deepseek(GENERATOR_SYSTEM, prompt, 1200)
 
-        conn = get_db(); cur = conn.cursor()
-        now = datetime.datetime.utcnow()
-        if not u["is_paid"] or not u["paid_until"] or u["paid_until"] <= now:
-            cur.execute(
-                "UPDATE users SET free_left=free_left-1, total_generated=total_generated+1 WHERE id=%s",
-                (request.user_id,)
-            )
-        else:
-            cur.execute(
-                "UPDATE users SET total_generated=total_generated+1 WHERE id=%s",
-                (request.user_id,)
-            )
-        cur.execute("""INSERT INTO generations (user_id,niche,archetype,cat,tone,topic,result,strategy)
+        if u:
+            conn = get_db(); cur = conn.cursor()
+            now = datetime.datetime.utcnow()
+            if not u["is_paid"] or not u["paid_until"] or u["paid_until"] <= now:
+                cur.execute(
+                    "UPDATE users SET free_left=free_left-1, total_generated=total_generated+1 WHERE id=%s",
+                    (request.user_id,)
+                )
+            else:
+                cur.execute(
+                    "UPDATE users SET total_generated=total_generated+1 WHERE id=%s",
+                    (request.user_id,)
+                )
+            cur.execute("""INSERT INTO generations (user_id,niche,archetype,cat,tone,topic,result,strategy)
             VALUES (%s,%s,%s,%s,%s,%s,%s,%s)""",
             (request.user_id, body.get('niche',''), body.get('archetype',''),
              cat, body.get('tone',''), body.get('topic',''), result, chosen['name']))
-        conn.commit(); cur.close(); conn.close()
+            conn.commit(); cur.close(); conn.close()
 
-        u2 = get_user(request.user_id)
-        return jsonify({
-            "result": result,
-            "strategy": chosen['name'],
-            "free_left": u2["free_left"],
-            "is_paid": u2["is_paid"],
-            "paid_until": u2["paid_until"].isoformat() if u2["paid_until"] else None
-        })
+        if u:
+            u2 = get_user(request.user_id)
+            return jsonify({
+                "result": result,
+                "strategy": chosen['name'],
+                "free_left": u2["free_left"],
+                "is_paid": u2["is_paid"],
+                "paid_until": u2["paid_until"].isoformat() if u2["paid_until"] else None
+            })
+        else:
+            return jsonify({
+                "result": result,
+                "strategy": chosen['name'],
+                "free_left": None,
+                "is_paid": False,
+                "paid_until": None
+            })
     except Exception as e:
         return jsonify({"error":str(e)}), 500
 
