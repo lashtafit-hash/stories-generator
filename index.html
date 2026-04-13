@@ -505,10 +505,6 @@ function logout(){
   if(cb)cb.style.display='none';
   if(lb)lb.style.display='block';
   showPage('pg-login');
-};
-  localStorage.removeItem('token');
-  localStorage.removeItem('userData');
-  showPage('pg-login');
 }
 
 async function loadCabinet(){
@@ -783,8 +779,6 @@ function copyRes(){
     guestLeft=parseInt(localStorage.getItem('guestLeft')??GUEST_LIMIT);
     updateGuestCounter();
     showPage('pg-app');
-  }
-  document.getElementById('niche').addEventListener('keydown',e=>{if(e.key==='Enter')analyzeNiche()});Page('pg-app');
   }
   document.getElementById('niche').addEventListener('keydown',e=>{if(e.key==='Enter')analyzeNiche()});
 
