@@ -287,7 +287,9 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
       <div class="app-logo">ME•CODE</div>
       <div class="app-top-right">
         <div class="counter" id="top-counter"></div>
-        <button class="btn-sm" onclick="showPage('pg-cabinet')">Кабинет</button>
+        <button class="btn-sm" id="install-btn" onclick="installPWA()" style="display:none">+ На экран</button>
+        <button class="btn-sm" id="cab-btn" onclick="showPage('pg-cabinet')" style="display:none">Кабинет</button>
+        <button class="btn-sm" id="login-btn-top" onclick="showPage('pg-login')">Войти</button>
       </div>
     </div>
 
@@ -368,6 +370,14 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
       <button class="btn-main show" onclick="generate()" id="gen-btn" style="margin-top:10px">Создать сторис →</button>
       <button class="btn-restart" id="btn-restart" onclick="restartAll()">← Начать заново</button>
 
+      <div id="reg-prompt" style="display:none;background:var(--s1);border:1px solid var(--s3);border-radius:2px;padding:28px 22px;text-align:center;margin-top:18px">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:var(--ink);margin-bottom:8px">3 из 3 использованы ✦</div>
+        <div style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.6;margin-bottom:16px">Бесплатные попытки закончились.<br>Зарегистрируйся и получи ещё 3 генерации бесплатно!</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--pink);font-style:italic;margin-bottom:20px">+ 3 генерации бесплатно</div>
+        <button class="btn-pink" onclick="showPage('pg-register')" style="margin-bottom:10px">Зарегистрироваться →</button>
+        <div style="font-size:12px;color:var(--muted);margin-top:10px">Уже есть аккаунт? <a onclick="showPage('pg-login')" style="color:var(--pink);cursor:pointer">Войти</a></div>
+      </div>
+
       <div class="paywall" id="paywall">
         <div class="paywall-title">Бесплатные генерации закончились</div>
         <div class="paywall-sub">Оформи подписку и получи безлимитный доступ на весь месяц</div>
@@ -401,6 +411,9 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);m
 const API = "https://web-production-3a26.up.railway.app";
 let token = localStorage.getItem("token") || "";
 let userData = {};
+const GUEST_LIMIT = 3;
+let isGuest = false;
+let guestLeft = parseInt(localStorage.getItem('guestLeft') ?? GUEST_LIMIT);
 let archetypeData={}, selectedCat=null, selectedTone=null, selectedCount=3;
 let lastGenParams = null;
 const CAT_LABELS={sell:'✦ Продающие',warmup:'◈ Прогрев',life:'✿ Лайф',expert:'◇ Экспертные'};
@@ -426,6 +439,24 @@ function updateCounter(){
     el.textContent=`${userData.free_left??0} из 10`;
     el.className='counter';
   }
+}
+
+function updateGuestCounter(){
+  const el=document.getElementById('top-counter');
+  if(!el)return;
+  el.textContent=`${guestLeft} из ${GUEST_LIMIT}`;
+  el.className='counter';
+  el.style.display='block';
+}
+
+function showLoggedIn(){
+  isGuest=false;
+  localStorage.removeItem('guestLeft');
+  const cb=document.getElementById('cab-btn');
+  const lb=document.getElementById('login-btn-top');
+  if(cb)cb.style.display='block';
+  if(lb)lb.style.display='none';
+  updateCounter();
 }
 
 // ── AUTH ──
@@ -461,11 +492,20 @@ function saveUser(d){
   token=d.token;userData=d;
   localStorage.setItem('token',token);
   localStorage.setItem('userData',JSON.stringify(d));
-  updateCounter();
+  showLoggedIn();
 }
 
 function logout(){
   token='';userData={};
+  localStorage.removeItem('token');
+  localStorage.removeItem('userData');
+  isGuest=false;
+  const cb=document.getElementById('cab-btn');
+  const lb=document.getElementById('login-btn-top');
+  if(cb)cb.style.display='none';
+  if(lb)lb.style.display='block';
+  showPage('pg-login');
+};
   localStorage.removeItem('token');
   localStorage.removeItem('userData');
   showPage('pg-login');
@@ -540,7 +580,9 @@ async function analyzeNiche(){
   document.getElementById('err1').classList.add('show');
   document.getElementById('err1').style.color='var(--muted)';
   try{
-    const r=await fetch(`${API}/analyze`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({niche})});
+    const ah={'Content-Type':'application/json'};
+    if(token)ah['Authorization']='Bearer '+token;
+    const r=await fetch(`${API}/analyze`,{method:'POST',headers:ah,body:JSON.stringify({niche})});
     if(r.status===401){logout();return}
     archetypeData=await r.json();
   }catch(e){
@@ -658,12 +700,23 @@ async function generate(){
     }
     if(d.error){showErr('err2',d.error);return}
 
-    if(typeof d.free_left!=='undefined')userData.free_left=d.free_left;
-    if(typeof d.is_paid!=='undefined')userData.is_paid=d.is_paid;
-    if(d.paid_until)userData.paid_until=d.paid_until;
-    localStorage.setItem('userData',JSON.stringify(userData));
-    updateCounter();
-
+    if(isGuest){
+      guestLeft--;
+      localStorage.setItem('guestLeft',guestLeft);
+      updateGuestCounter();
+      if(guestLeft<=0){
+        setTimeout(()=>{
+          const rp=document.getElementById('reg-prompt');
+          if(rp){rp.style.display='block';rp.scrollIntoView({behavior:'smooth',block:'start'});}
+        },800);
+      }
+    } else {
+      if(typeof d.free_left!=='undefined')userData.free_left=d.free_left;
+      if(typeof d.is_paid!=='undefined')userData.is_paid=d.is_paid;
+      if(d.paid_until)userData.paid_until=d.paid_until;
+      localStorage.setItem('userData',JSON.stringify(userData));
+      updateCounter();
+    }
     hideErr('err2');
     document.getElementById('err2').style.color='var(--pink2)';
     parseAndRender(d.result||'',d.strategy||'');
@@ -716,20 +769,22 @@ function copyRes(){
 (function(){
   const saved=localStorage.getItem('userData');
   if(token&&saved){
-    // Залогинен — показываем генератор сразу
     userData=JSON.parse(saved);
     isGuest=false;
     localStorage.removeItem('guestLeft');
-    document.getElementById('cab-btn').style.display='block';
-    document.getElementById('login-btn-top').style.display='none';
+    const cb=document.getElementById('cab-btn');
+    const lb=document.getElementById('login-btn-top');
+    if(cb)cb.style.display='block';
+    if(lb)lb.style.display='none';
     updateCounter();
     showPage('pg-app');
   } else {
-    // Гость — показываем генератор с гостевым счётчиком
     isGuest=true;
     guestLeft=parseInt(localStorage.getItem('guestLeft')??GUEST_LIMIT);
     updateGuestCounter();
     showPage('pg-app');
+  }
+  document.getElementById('niche').addEventListener('keydown',e=>{if(e.key==='Enter')analyzeNiche()});Page('pg-app');
   }
   document.getElementById('niche').addEventListener('keydown',e=>{if(e.key==='Enter')analyzeNiche()});
 
