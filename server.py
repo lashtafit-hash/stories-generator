@@ -402,23 +402,26 @@ def yukassa_webhook():
 # ── KIMI ──────────────────────────────────────────────────────────────────────
 
 def call_kimi(system_prompt, user_prompt, max_tokens=1200):
+    payload = {
+        "model": "kimi-k2.5",
+        "thinking": {"type": "disabled"},
+        "max_tokens": max_tokens,
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ]
+    }
+
     r = requests.post(
         KIMI_URL,
         headers={"Authorization": f"Bearer {KIMI_API_KEY}", "Content-Type": "application/json"},
-        json={
-            "model": "kimi-k2.5",
-            "thinking": {"type": "disabled"},
-            "max_tokens": max_tokens,
-            "temperature": 0.85,
-            "top_p": 0.9,
-            "messages": [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt}
-            ]
-        },
+        json=payload,
         timeout=45
     )
-    r.raise_for_status()
+
+    if not r.ok:
+        raise Exception(f"Kimi API error {r.status_code}: {r.text}")
+
     data = r.json()
     return data["choices"][0]["message"]["content"]
 
