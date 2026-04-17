@@ -8,13 +8,13 @@ import re
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-DEEPSEEK_API_KEY  = os.environ.get("DEEPSEEK_API_KEY", "")
+KIMI_API_KEY      = os.environ.get("KIMI_API_KEY", "")
 DATABASE_URL      = os.environ.get("DATABASE_URL", "")
 JWT_SECRET        = os.environ.get("JWT_SECRET", "change-me-please-123")
 YUKASSA_SHOP_ID   = os.environ.get("YUKASSA_SHOP_ID", "")
 YUKASSA_SECRET    = os.environ.get("YUKASSA_SECRET", "")
 SITE_URL          = os.environ.get("SITE_URL", "https://daring-smm.ru/stories-generator/")
-DEEPSEEK_URL      = "https://api.deepseek.com/v1/chat/completions"
+KIMI_URL          = "https://api.moonshot.cn/v1/chat/completions"
 
 
 # ── БД ───────────────────────────────────────────────────────────────────────
@@ -399,23 +399,37 @@ def yukassa_webhook():
     return jsonify({"ok": True})
 
 
-# ── DEEPSEEK ──────────────────────────────────────────────────────────────────
+# ── KIMI / MOONSHOT ───────────────────────────────────────────────────────────
 
-def call_deepseek(system_prompt, user_prompt, max_tokens=1200):
-    r = requests.post(DEEPSEEK_URL,
-        headers={"Authorization": f"Bearer {DEEPSEEK_API_KEY}", "Content-Type": "application/json"},
+def call_kimi(system_prompt, user_prompt, max_tokens=1200):
+    r = requests.post(
+        KIMI_URL,
+        headers={"Authorization": f"Bearer {KIMI_API_KEY}", "Content-Type": "application/json"},
         json={
-            "model": "deepseek-chat",
+            "model": "moonshot-v1-8k",
             "max_tokens": max_tokens,
             "temperature": 0.9,
-            "top_p": 0.95,
             "messages": [
                 {"role": "system", "content": system_prompt},
-                {"role": "user",   "content": user_prompt}
+                {"role": "user", "content": user_prompt}
             ]
         },
-        timeout=45)
-    return r.json()["choices"][0]["message"]["content"]
+        timeout=45
+    )
+
+    try:
+        data = r.json()
+    except Exception:
+        r.raise_for_status()
+        raise
+
+    if r.status_code >= 400:
+        raise Exception(data.get("error", {}).get("message") or data.get("msg") or str(data))
+
+    try:
+        return data["choices"][0]["message"]["content"]
+    except Exception:
+        raise Exception(f"Unexpected Kimi response: {data}")
 
 
 # ── СЦЕНАРИИ ПО КАТЕГОРИЯМ ────────────────────────────────────────────────────
@@ -733,7 +747,7 @@ def analyze():
         if direct:
             return jsonify(direct)
 
-        result = call_deepseek(
+        result = call_kimi(
             ARCHETYPE_SYSTEM,
             f"""Ниша: {niche}
 Определи архетип не самого эксперта, а его целевой аудитории.
@@ -857,7 +871,7 @@ CTA:
 Только текст для экрана. Никаких описаний визуала."""
 
     try:
-        result = call_deepseek(GENERATOR_SYSTEM, prompt, 1200)
+        result = call_kimi(GENERATOR_SYSTEM, prompt, 1200)
 
         if u:
             conn = get_db(); cur = conn.cursor()
